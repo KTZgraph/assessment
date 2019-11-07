@@ -37,9 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', #RuntimeError: Model class django.contrib.sites.models.Site doesn't declare an explicit app_label and isn't in an application in INSTALLED_APPS.  
 
     'rest_framework',
     'rest_framework.authtoken', # autoryzacja
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'rest_auth',
+    'rest_auth.registration',
+
+    'crispy_forms',
 
     'users',
 ]
@@ -124,4 +134,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# stworozny przeze nie skuskomizowany model użytkownika
 AUTH_USER_MODEL = "users.CustomUser"
+
+# formsy wyglądajace jak bootstrap
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+SITE_ID = 1 # dla django.contrib.sites
+
+# register new account via rest; django-allauth
+#nie wymagam weryfikacji emaila, ale jednak chcę żeby użytkownik musiał podac email
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_REQUIRED = (True)
