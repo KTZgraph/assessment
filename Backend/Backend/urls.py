@@ -25,7 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # użycie wbudowanej rejestracji django ale z naszym skastomizowanym modelem
-    path("accounts/register", #custom version of the RegistrationView provided by django
+    path("accounts/register/", #custom version of the RegistrationView provided by django
         RegistrationView.as_view( # we used to create account bvia browser
             form_class=CustomUserForm,
             success_url="/",
