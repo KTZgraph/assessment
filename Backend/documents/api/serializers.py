@@ -17,7 +17,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     def get_document_code(self, instance):
         """Zwraca unikalny kod znajdujący się na górze dokumentu"""
-        return instance.document.get_document_code
+        return instance.document.document_code
     
     def get_document_file(self, instance):
         """Zwraca url do głównego dokumentu"""
@@ -34,7 +34,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     document_code = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        model = Question
+        model = Document
         exclude = ["updated_at"]
 
     def get_created_at(self, instance):
@@ -43,3 +43,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     def get_document_file(self, instance):
         """Zwraca url dokumentu"""
         return instance.document_file.url
+
+    def get_document_code(self, instance):
+        """Zwraca unikalny kod znajdujący się na górze dokumentu"""
+        return instance.document_code

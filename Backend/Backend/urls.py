@@ -41,6 +41,9 @@ urlpatterns = [
 
     path("api/", #dodanie urli z api aplikacji users
         include("users.api.urls")),
+    
+    path("api/", #dodanie urli z api aplikacji documents - głównej aplikacji
+        include("documents.api.urls")),
 
     path("api-auth/", #login via browserable API
         include("rest_framework.urls")), #login users via browser
