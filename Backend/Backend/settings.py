@@ -156,5 +156,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+    ),
+    #zmiana domyslnych uprawnien do widoków
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated', # bo domyslnie wszystkie widoki sa allowAny
     )
 }
