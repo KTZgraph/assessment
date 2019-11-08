@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'crispy_forms',
 
     'users',
+    'documents',
 ]
 
 MIDDLEWARE = [
@@ -162,3 +163,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated', # bo domyslnie wszystkie widoki sa allowAny
     )
 }
+
+# przechowywanie plików
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # my pc path - for server
+MEDIA_URL = '/media/' #browsable path - for users
