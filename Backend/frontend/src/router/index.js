@@ -4,6 +4,8 @@ import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import Home from "../views/Home.vue";
+import CropImage from "../views/CropImage.vue";
+
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
@@ -13,6 +15,11 @@ const routes = [
     path: "/",
     name: "home",
     component: Home
+  },
+  {
+    path: "/crop",
+    name: "cropImage",
+    component: CropImage
   },
   {
     path: "/about",
