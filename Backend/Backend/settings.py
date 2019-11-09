@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pl'
 
 TIME_ZONE = 'UTC'
 
@@ -170,6 +170,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # my pc path - for server
 MEDIA_URL = '/media/' #browsable path - for users
 
 
+# do korzystania z hot-reload single app Vue.js  
 WEBPACK_LOADER = {
     'DEFAULT':{
         'BUNDLE_DIR_NAME': 'dist/',

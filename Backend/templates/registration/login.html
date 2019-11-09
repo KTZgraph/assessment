@@ -1,14 +1,16 @@
-{% extends 'auth_layout.html' %}
+  {% extends 'auth_layout.html' %}
 {% load crispy_forms_tags %}
 
-{% block content %}
-<h1>Login</h1>
+{% block auth %}
+<h1>System Oceniania</h1>
+<!-- <p class="lead text-muted">Share Your Knowledge!</p> -->
 <div class="login-form-container">
     <form method="POST">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-sm btn-outline-primary">Login</button>
+        <button type="submit" class="btn btn-sm btn-outline-primary">Logowanie</button>
     </form>
+    <!-- django_registration_register - name from urls -->
+    <p class="mt-2">Or a <a href="{% url 'django_registration_register' %}">Stwórz konto</p>
 </div>
-
 {% endblock %}
