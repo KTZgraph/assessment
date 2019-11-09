@@ -1,3 +1,5 @@
+from django.db import IntegrityError
+from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated #widok tylko dla zalogowanych
 
@@ -18,5 +20,14 @@ class DocumentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     #autoamtyczne dodawanie autora - nadpisanie wbudowanej metody
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+    def perform_create(self, serializer): # TODO: wycofywanie pliku tranzakcje
+        tra = transaction.savepoint()
+        try:
+            with transaction.atomic():
+                serializer.save(author=self.request.user,
+                            document_file=self.request.data.get('document_file'))
+                transaction.savepoint_commit(tra)
+        except IntegrityError:
+            transaction.savepoint_rollback(tra)
+            
+    
