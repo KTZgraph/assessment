@@ -3,7 +3,7 @@
     <div class="img-container">
       <img ref="image" :src="src">
     </div>
-    <img :src="destination">
+    <img :src="destination" class="img-preview">
   </div>
 </template>
 
@@ -41,9 +41,14 @@ export default {
 </script>
 
 <style scoped>
-.img-container{
-  width: 640px;
-  height: 480px;
-}
-
+  .img-container{
+    width: 640px;
+    height: 480px;
+  }
+  .img-preview{
+    width: 200px;
+    height: 200px;
+    float: left;
+    margin-left: 10px;
+  }
 </style>
