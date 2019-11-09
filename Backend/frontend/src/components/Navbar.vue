@@ -3,20 +3,22 @@
     <!-- link do głównej strony aplikacji -->
     <router-link :to="{ name: 'home' }" class="navbar-brand">System Oceniania</router-link>
     
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <router-link :to="{ name: 'home' }" class="nav-link">Dodaj Dokument</router-link>
+                <router-link :to="{ name: 'document-editor' }" class="btn btn-sm btn-success">Dodaj Dokument</router-link>
             </li>
         </ul>
     </div>
-    <form class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <!-- Search form -->
+    <form class="form-inline">
+        <i class="fas fa-search" aria-hidden="false"></i>
+        <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search" aria-label="Search">
     </form>
+
     <ul class="navbar-nav ml-auto">
         <li class="nav-item active">
-            <a class="nav-link" href="/accounts/logout/">Wyloguj</a>
+            <a class="btn btn-sm btn-danger" href="/accounts/logout/"><strong>Wyloguj</strong></a>
         </li>
     </ul>
 
@@ -37,7 +39,12 @@ export default {
   font-weight: bold;
   font-size: 130%;
 }
+
 .navbar-brand:hover {
+  color: #dc3545 !important;
+}
+
+.nav-link:hover {
   color: #dc3545 !important;
 }
 </style>
