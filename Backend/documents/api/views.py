@@ -21,13 +21,13 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
     #autoamtyczne dodawanie autora - nadpisanie wbudowanej metody
     def perform_create(self, serializer): # TODO: wycofywanie pliku tranzakcje
-        tra = transaction.savepoint()
         try:
-            with transaction.atomic():
-                serializer.save(author=self.request.user,
+            serializer.save(author=self.request.user,
                             document_file=self.request.data.get('document_file'))
-                transaction.savepoint_commit(tra)
-        except IntegrityError:
-            transaction.savepoint_rollback(tra)
+        except BaseException as ex:
+            import traceback; traceback.print_exc()
+            print("EEEEEEEEEEEEEEEEEEEEEEEEEE: ", ex)
+        
+
             
     

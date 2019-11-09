@@ -32,6 +32,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
     document_code = serializers.SerializerMethodField(read_only=True)
+    slug = serializers.SlugField(read_only=True)
 
     class Meta:
         model = Document

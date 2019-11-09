@@ -10,7 +10,8 @@ class Document(models.Model):
     """
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    document_code = models.CharField(max_length=255, unique=True) # id dokumentu pobierane/uzupełniane ręcznie z góry pliku
+    document_code = models.CharField(max_length=255) #, unique=True) # id dokumentu pobierane/uzupełniane ręcznie z góry pliku
+    slug = models.SlugField(max_length=255, unique=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
                                 related_name="documents")
