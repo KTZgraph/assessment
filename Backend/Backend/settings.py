@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
 
     'crispy_forms',
+    'webpack_loader',
 
     'users',
     'documents',
@@ -167,3 +168,11 @@ REST_FRAMEWORK = {
 # przechowywanie plików
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # my pc path - for server
 MEDIA_URL = '/media/' #browsable path - for users
+
+
+WEBPACK_LOADER = {
+    'DEFAULT':{
+        'BUNDLE_DIR_NAME': 'dist/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'frontend', 'webpack-stats.json'),
+    }
+}
