@@ -34,3 +34,22 @@ class AnswerCreateAPIView(generics.CreateAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
     permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        request_user = self.request.user
+        kwarg_slug = self.kwargs.get("slug")
+        document = get_object_or_404(Document, slug=kwarg_slug)
+
+        # czy uzytkownik moze więcej niż razy odpowiedzieć na to zadanie?
+
+        serializer.save(author=request_user, document=document)
+
+
+class AnswerListAPIView(generics.ListAPIView):
+    serializer_class = AnswerSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        kwarg_slug = self.kwargs.get("slug")
+        return Answer.objects.filter(document__slug=kwarg_slug).order_by("-created_at")
+

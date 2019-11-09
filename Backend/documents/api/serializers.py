@@ -10,7 +10,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        exclude = ["documents", "updated_at"]
+        exclude = ["document", "updated_at"]
     
     def get_created_at(self, instance):
         return instance.created_at.strftime("%B %d, %Y") # month day year
