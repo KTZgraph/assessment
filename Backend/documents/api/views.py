@@ -7,6 +7,10 @@ from documents.models import Document
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
+    """
+    Widok do dodawania plików razem z metadanymi od użytkownika
+    - pole document_code musi być unikalne i od razu podane [!]
+    """
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
 
