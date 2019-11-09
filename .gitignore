@@ -266,3 +266,7 @@ pip-selfcheck.json
 *.bat
 *.cmd
 *.btm
+
+
+### media files
+media/

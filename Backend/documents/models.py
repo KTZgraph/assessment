@@ -10,6 +10,7 @@ class Document(models.Model):
     """
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # TODO: wymusic na uzytkowniku unikalne id
     document_code = models.CharField(max_length=255) #, unique=True) # id dokumentu pobierane/uzupełniane ręcznie z góry pliku
     slug = models.SlugField(max_length=255, unique=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
