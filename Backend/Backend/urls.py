@@ -23,7 +23,14 @@ from django_registration.backends.one_step.views import RegistrationView
 from core.views import IndexTemplateView
 from users.forms import CustomUserForm
 
-urlpatterns = [
+urlpatterns = [] 
+
+#obejscie urli dla obrazkow, bo inaczej Vue nie chce wyświetlac obrazków serwisowanych przez django
+if settings.DEBUG:
+    # dodanie musi być przed re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point")
+    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns = urlpatterns +  [
     path('admin/', admin.site.urls),
 
     # użycie wbudowanej rejestracji django ale z naszym skastomizowanym modelem
@@ -58,6 +65,3 @@ urlpatterns = [
     
     re_path(r"^.*$", IndexTemplateView.as_view(), name="entry-point")
 ]
-
-if settings.DEBUG:
-    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
