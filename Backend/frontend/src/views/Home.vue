@@ -7,16 +7,16 @@
           <span class="document-author">{{ doc.author }}</span>
         </p>
       <!--  -->
-      <a v-bind:href="doc.document_file">
-        <b-img class="img-mini" v-bind:src="doc.document_file" fluid-grow alt="Fluid image"></b-img>
-      </a>
       <!--  -->
         <h2>
-          <!-- <router-link
+          <router-link
             :to="{ name: 'document', params: { slug: doc.slug }}"
             class="document-link"
-          >{{ document.content }}
-          </router-link> -->
+          >
+          <a v-bind:href="doc.document_file">
+            <b-img class="img-mini" v-bind:src="doc.document_file" fluid-grow alt="Fluid image"></b-img>
+          </a>
+          </router-link>
         </h2>
          <a v-bind:href="doc.document_file"><p>Podgląd</p></a>
         <hr>
@@ -62,7 +62,6 @@ export default {
       axios.get(endpoint)
         .then(response => {
           this.documents.push(...response.data.results);
-          console.log(response.data.next);
           this.loadingDocuments = false;
           if (response.data.next) { //url from django REST for next data (pagination)
             this.next = response.data.next;
