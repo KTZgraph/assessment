@@ -5,4 +5,5 @@ module.exports = {
     "parserOptions": {
         "sourceType": "module"
     }
+    //npm install babel-eslint --save-dev
 };
