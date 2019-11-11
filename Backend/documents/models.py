@@ -23,7 +23,7 @@ class Document(models.Model):
     scores = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
-        return document_code # albo sćieżka do pliku self.document_file.url 
+        return self.document_code # albo sćieżka do pliku self.document_file.url 
 
 
 def answer_upload_to(instance, filename):

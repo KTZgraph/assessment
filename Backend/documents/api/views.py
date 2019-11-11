@@ -36,14 +36,11 @@ class AnswerCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
+        # TODO: poprawić bledy z slug i id - nie mieszac ich
         request_user = self.request.user
-        print("self.kwargs: \n\n\n", self.kwargs)
         kwarg_slug = self.kwargs.get("slug")
-        a = Document.objects.filter(slug=kwarg_slug)
-        print("AAAAAAAAAAAAAAAAA\n\n: ", a)
-        document = get_object_or_404(Document, id=kwarg_slug)
-
-        # czy uzytkownik moze więcej niż razy odpowiedzieć na to zadanie?
+        b = Document.objects.get(id=1)
+        document = get_object_or_404(Document, id=int(kwarg_slug))
 
         serializer.save(author=request_user, document=document,
         answer_file=self.request.data.get('answer_file'))
