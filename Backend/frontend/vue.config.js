@@ -6,6 +6,7 @@ module.exports = {
     // publicPath: "http://0.0.0.0:8081/", 
     publicPath: "http://127.0.0.1:8081/", 
     outputDir: './dist/',
+    lintOnSave: false, // https://stackoverflow.com/questions/38757069/how-to-disable-eslint-in-vue-cli
 
     chainWebpack: config => {
 
