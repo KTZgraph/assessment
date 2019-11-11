@@ -118,7 +118,6 @@ export default {
                 .then(response => {
                     if(response){
                         this.document = response.data;
-                        console.log(response.data);
                         this.setPageTitle(response.data.slug);
                     }else{
                         this.document = null;
@@ -127,18 +126,17 @@ export default {
             })
         },
         getDocumentsAnswers(){
-            let endpoint = `/api/documents/${this.document_id}/answers/`;
-            axios({
-                method: 'get',
-                url: endpoint,
-                })
-                .then(function (response) {
-                    this.answers = response.data.results;
-                    console.log(response);
-                })
-                .catch(function (response) {
-                    console.log(response);
-                });
+            let endpoint = `/api/documents/1/answers/`;
+            console.log(endpoint)
+            axios.get(endpoint)
+                .then(response => {
+                    if(response){
+                        this.answers.push(...response.data.results);
+                    }else{
+                        this.answers = null;
+                        this.setPageTitle("404 - Page Not Found");
+                }
+            })
 
         },
         onSubmit(){
