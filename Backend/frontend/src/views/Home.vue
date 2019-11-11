@@ -1,14 +1,20 @@
 <template>
   <div class="home">
     <ul>
-    <li v-for="doc in documents"> {{doc.author}} {{doc.document_file}} </li>
+    <li v-for="doc in documents"> 
+      {{doc.author}} 
+      {{doc.document_file}}
+      <img v-bind:src="doc.document_file" />
+
+
+
+    </li>
     </ul>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-//https://lizardgizzards.com/weird-eslint-errors-in-vue-cli-projects/
 export default {
   name: "home",
   components: {
