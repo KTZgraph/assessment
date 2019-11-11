@@ -4,7 +4,12 @@
     <li v-for="doc in documents"> 
       {{doc.author}} 
       {{doc.document_file}}
-      <img v-bind:src="doc.document_file" />
+      <!-- <img v-bind:src="doc.document_file" /> -->
+      <a v-bind:href="doc.document_file">
+        <b-img class="img-mini" v-bind:src="doc.document_file" fluid-grow alt="Fluid image"></b-img>
+      </a>
+
+
 
 
 
@@ -32,3 +37,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.img-mini{
+    max-width:200px;
+    max-height:200px;
+}
+
+</style>
