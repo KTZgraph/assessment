@@ -8,6 +8,8 @@ class Document(models.Model):
     """
     Model Plik dokumentu z zadaniami zawierajacy wiele odpowiedzi
     """
+    # TODO: dodac pole czy dany użytkownik już opisał dokuemnt
+    # TODO: dodac pole czy użytkownik już dodał punkty
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # TODO: wymusic na uzytkowniku unikalne id

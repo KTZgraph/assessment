@@ -1,8 +1,48 @@
 <template>
   <div class="document">
-      <h1>DOCUMENT</h1>
         <div v-if="document" class="container">
+            <div class="document-data">
+                <!-- zamienic potem na document.document_code -->
+                <h1>{{ document.slug }}</h1>
+                <p class="mb-0">
+                    Dodane przez: <span class="author-name">{{ document.author }}</span>
+                </p>
+                <p class="mb-0">
+                    Kod: <span class="author-name">{{ document.document_code }}</span>
+                </p>
+                <p class="mb-0">
+                    Utworzono: <span class="author-name">{{ document.created_at }}</span>
+                </p>
+                <div>
+                    <p>Liczba punktów <input v-model.number="score" type="number"></p>
+                </div>
+                <div  @submit.prevent="onSubmit">
+                    <div class="card-block">
+                        <textarea
+                        v-model="newAnswerBody"
+                        class="form-control"
+                        placeholder="Opisz wybrany dokument"
+                        rows="5"
+                        ></textarea>
+                    </div>
+                    <div class="card-footer px-3">
+                        <button type="submit" class="btn btn-sm btn-success">Dodaj opis</button>
+                    </div>
+                    <p v-if="error" class="error mt-2">{{ error }}</p>
+                </div>
 
+                <!-- tworzenie zadań -->
+                <div  @submit.prevent="onSubmit">
+                    <div class="card-footer px-3">
+                        <button type="submit" class="btn btn-sm btn-danger">Stwórz zadania z pliku</button>
+                    </div>
+                </div>
+            </div>
+            <!-- image -->
+            <div class="document-image">
+                <b-img class="img-full" v-bind:src="document.document_file" fluid-grow alt="Fluid image"></b-img>
+                <hr />
+            </div>
         </div>
     </div>
 </template>
@@ -21,13 +61,14 @@ export default {
         return {
             document: {},
             answers: [],
+            score: 0,
             newAnswerBody: null,
             error: null,
             userHasAnswered: false,
                 showForm: false,
                 next: null,
             loadingAnswers: false,
-            requestUser: null
+            requestUser: null,
         };
     },
     computed: {
@@ -68,6 +109,19 @@ export default {
 </script>
 
 <style scoped>
+.container{
+    text-align:center;
+}
+.document-data{
+    display: inline-block;
+    vertical-align: middle;
+
+}
+.document-image{
+    display: inline-block;
+    vertical-align: middle;
+
+}
 
 
 </style>
