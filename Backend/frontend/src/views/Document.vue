@@ -13,23 +13,28 @@
                 <p class="mb-0">
                     Utworzono: <span class="author-name">{{ document.created_at }}</span>
                 </p>
+                <!-- formularz do zapisu danych  -->
                 <div>
                     <p>Liczba punktów <input v-model.number="score" type="number"></p>
                 </div>
-                <div  @submit.prevent="onSubmit">
+
+                <form  @submit.prevent="onSubmit">
                     <div class="card-block">
                         <textarea
-                        v-model="newAnswerBody"
+                        v-model="newDocumentBody"
                         class="form-control"
                         placeholder="Opisz wybrany dokument"
                         rows="5"
                         ></textarea>
                     </div>
+                    <br>
                     <div class="card-footer px-3">
                         <button type="submit" class="btn btn-sm btn-success">Dodaj opis</button>
                     </div>
-                    <p v-if="error" class="error mt-2">{{ error }}</p>
-                </div>
+                </form>
+                <p v-if="error" class="error mt-2">{{ error }}</p>
+                <!-- koniec formularz do zapisu danych  -->
+
 
                 <!-- tworzenie zadań -->
                 <div  @submit.prevent="onSubmit">
@@ -40,7 +45,9 @@
             </div>
             <!-- image -->
             <div class="document-image">
-                <b-img class="img-full" v-bind:src="document.document_file" fluid-grow alt="Fluid image"></b-img>
+                <a v-bind:href="document.document_file">
+                    <b-img class="img-full" v-bind:src="document.document_file" fluid-grow alt="Fluid image"></b-img>
+                </a>
                 <hr />
             </div>
         </div>
@@ -62,7 +69,7 @@ export default {
             document: {},
             answers: [],
             score: 0,
-            newAnswerBody: null,
+            newDocumentBody: null,
             error: null,
             userHasAnswered: false,
                 showForm: false,
@@ -100,7 +107,10 @@ export default {
                         this.setPageTitle("404 - Page Not Found");
                 }
             })
-        }
+        },
+         onSubmit(){
+             console.log(this.newDocumentBody);
+         }
     },
     created(){
         this.getQuestionData();
