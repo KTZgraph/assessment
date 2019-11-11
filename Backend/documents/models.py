@@ -39,8 +39,8 @@ class Answer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # fragment pliku po wybraniu tresci zadania
-    score =  models.PositiveSmallIntegerField() # liczba otrzymanych punktów
-    max_score =  models.PositiveSmallIntegerField()# maksymalna ilośc punktów za zadanie
+    score =  models.PositiveSmallIntegerField(default=0) # liczba otrzymanych punktów
+    max_score =  models.PositiveSmallIntegerField(default=0)# maksymalna ilośc punktów za zadanie
     note =  models.TextField(blank=True)# uwagi/notatka
     # autor dokumentu nie musi oceniać zadania
     author = models.ForeignKey(settings.AUTH_USER_MODEL,

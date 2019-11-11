@@ -11,6 +11,12 @@
                     Kod: <span class="author-name">{{ document.document_code }}</span>
                 </p>
                 <p class="mb-0">
+                    Aktualna liczba punktów: <span class="author-name">{{ document.scores }}</span>
+                </p>
+                <p class="mb-0">
+                    Description: <span class="author-name">{{ document.description }}</span>
+                </p>
+                <p class="mb-0">
                     Utworzono: <span class="author-name">{{ document.created_at }}</span>
                 </p>
                 <!-- formularz do zapisu danych  -->
@@ -34,7 +40,6 @@
                 <p v-if="error" class="error mt-2">{{ error }}</p>
                 <!-- koniec formularz do zapisu danych  -->
 
-
                 <!-- tworzenie zadań -->
                 <div  @submit.prevent="onSubmit">
                     <div class="card-footer px-3">
@@ -50,20 +55,32 @@
                 <hr />
             </div>
         </div>
+        <!-- Odpowiedzi do dokumentu -->
+        <hr>
+        <div class="container">
+            <AnswerComponent 
+                v-for="(answer, index) in answers"
+                :answer="answer"
+                :v-key="index"
+            />
+        </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
-import { CSRF_TOKEN } from "@/common/csrf_token.js"
-
+import { CSRF_TOKEN } from "@/common/csrf_token.js";
+import AnswerComponent from "@/components/Answer.vue";
 export default {
     name: "Document",
     props: {
         document_id: {
-            type: String,
+            type: Number,
             required: true
         }
+    },
+    components: {
+        AnswerComponent
     },
     data() {
         return {
@@ -109,7 +126,22 @@ export default {
                 }
             })
         },
-         onSubmit(){
+        getDocumentsAnswers(){
+            let endpoint = `/api/documents/${this.document_id}/answers/`;
+            axios({
+                method: 'get',
+                url: endpoint,
+                })
+                .then(function (response) {
+                    this.answers = response.data.results;
+                    console.log(response);
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+
+        },
+        onSubmit(){
             let endpoint = `/api/documents/${this.document_id}/`;
             console.log(this.newDocumentBody);
             console.log(this.scores);
@@ -139,11 +171,9 @@ export default {
                 data: bodyUpdateDocument
                 })
                 .then(function (response) {
-                    //handle success
                     console.log(response);
                 })
                 .catch(function (response) {
-                    //handle error
                     console.log(response);
                 });
 
@@ -151,6 +181,7 @@ export default {
     },
     created(){
         this.getQuestionData();
+        this.getDocumentsAnswers();
     }
 };
 </script>

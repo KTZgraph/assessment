@@ -37,13 +37,16 @@ class AnswerCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         request_user = self.request.user
+        print("self.kwargs: \n\n\n", self.kwargs)
         kwarg_slug = self.kwargs.get("slug")
-        document = get_object_or_404(Document, slug=kwarg_slug)
+        a = Document.objects.filter(slug=kwarg_slug)
+        print("AAAAAAAAAAAAAAAAA\n\n: ", a)
+        document = get_object_or_404(Document, id=kwarg_slug)
 
         # czy uzytkownik moze więcej niż razy odpowiedzieć na to zadanie?
 
-        serializer.save(author=request_user, document=document)
-
+        serializer.save(author=request_user, document=document,
+        answer_file=self.request.data.get('answer_file'))
 
 class AnswerListAPIView(generics.ListAPIView):
     serializer_class = AnswerSerializer
@@ -53,3 +56,7 @@ class AnswerListAPIView(generics.ListAPIView):
         kwarg_slug = self.kwargs.get("slug")
         return Answer.objects.filter(document__slug=kwarg_slug).order_by("-created_at")
 
+class AnswerRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD Retrieve Update Destroy
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+    permission_classes = [IsAuthenticated]

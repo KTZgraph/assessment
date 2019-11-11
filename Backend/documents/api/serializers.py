@@ -27,6 +27,18 @@ class AnswerSerializer(serializers.ModelSerializer):
         """Zwraca url do fragmentu pliku zadania z rozwiązaniem"""
         return instance.answer_file.get_file_url
 
+    def get_score(self, instance):
+        """Zprzyznane punkty"""
+        return instance.score
+
+    def get_max_score(self, instance):
+        """Zwraca maksymalna liczbę punktów za zadanie"""
+        return instance.max_score
+    
+    def get_note(self, instance):
+        """Zwraca notatkę do zadania"""
+        return instance.note
+
 
 class DocumentSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
