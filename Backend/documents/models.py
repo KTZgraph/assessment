@@ -8,8 +8,6 @@ class Document(models.Model):
     """
     Model Plik dokumentu z zadaniami zawierajacy wiele odpowiedzi
     """
-    # TODO: dodac pole czy dany użytkownik już opisał dokuemnt
-    # TODO: dodac pole czy użytkownik już dodał punkty
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # TODO: wymusic na uzytkowniku unikalne id
@@ -19,8 +17,10 @@ class Document(models.Model):
                                 on_delete=models.CASCADE,
                                 related_name="documents")
      # file will be saved to MEDIA_ROOT/uploads/2015/01/30; albo zapisac pod document_code ?
-    document_file = models.FileField(upload_to=document_upload_to)
+    document_file = models.FileField(upload_to=document_upload_to, blank=True)
                                      #plik dokumentu zapisywany na dysku
+    description = models.TextField(blank=True)
+    scores = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return document_code # albo sćieżka do pliku self.document_file.url 
@@ -41,14 +41,14 @@ class Answer(models.Model):
     # fragment pliku po wybraniu tresci zadania
     score =  models.PositiveSmallIntegerField() # liczba otrzymanych punktów
     max_score =  models.PositiveSmallIntegerField()# maksymalna ilośc punktów za zadanie
-    note =  models.TextField()# uwagi/notatka
+    note =  models.TextField(blank=True)# uwagi/notatka
     # autor dokumentu nie musi oceniać zadania
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
     document = models.ForeignKey(Document,
                                     on_delete=models.CASCADE,
                                     related_name="answers")
-    answer_file = models.FileField(upload_to=answer_upload_to)
+    answer_file = models.FileField(upload_to=answer_upload_to, blank=True)
 
 
     def __str__(self):

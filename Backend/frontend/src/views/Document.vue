@@ -14,11 +14,10 @@
                     Utworzono: <span class="author-name">{{ document.created_at }}</span>
                 </p>
                 <!-- formularz do zapisu danych  -->
-                <div>
-                    <p>Liczba punktów <input v-model.number="score" type="number"></p>
-                </div>
-
                 <form  @submit.prevent="onSubmit">
+                    <div>
+                        <p>Liczba punktów <input v-model.number="scores" type="number"></p>
+                    </div>
                     <div class="card-block">
                         <textarea
                         v-model="newDocumentBody"
@@ -56,6 +55,8 @@
 
 <script>
 import axios from 'axios';
+import { CSRF_TOKEN } from "@/common/csrf_token.js"
+
 export default {
     name: "Document",
     props: {
@@ -68,7 +69,7 @@ export default {
         return {
             document: {},
             answers: [],
-            score: 0,
+            scores: 0,
             newDocumentBody: null,
             error: null,
             userHasAnswered: false,
@@ -95,7 +96,7 @@ export default {
         },
 
         getQuestionData() {
-            let endpoint = `/api/documents/${this.document_id}/`; // `slug` is a prop, always remember about `/` at the end!
+            let endpoint = `/api/documents/${this.document_id}/`;
             axios.get(endpoint)
                 .then(response => {
                     if(response){
@@ -109,7 +110,43 @@ export default {
             })
         },
          onSubmit(){
-             console.log(this.newDocumentBody);
+            let endpoint = `/api/documents/${this.document_id}/`;
+            console.log(this.newDocumentBody);
+            console.log(this.scores);
+
+            let bodyUpdateDocument = new FormData();
+            // opis dokumentu
+            if (this.newDocumentBody){
+                bodyUpdateDocument.set("description",this.newDocumentBody)
+
+            }
+            //punkty
+            if (this.scores){
+                // czy można aktualizaowac punkty
+                bodyUpdateDocument.set("scores",this.scores)
+            }
+
+            //brak aktualizacji obrazka - na jego podstawie są tworzone przeciez zadania
+            axios.defaults.headers.common = {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFTOKEN': CSRF_TOKEN
+            };
+
+            axios({
+                method: 'put',
+                url: endpoint,
+                withCredentials: true,
+                data: bodyUpdateDocument
+                })
+                .then(function (response) {
+                    //handle success
+                    console.log(response);
+                })
+                .catch(function (response) {
+                    //handle error
+                    console.log(response);
+                });
+
          }
     },
     created(){
