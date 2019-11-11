@@ -5,6 +5,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import Home from "../views/Home.vue";
 import ImageCropper from "@/components/ImageCropper.vue";
+import Document from "../views/Document.vue";
+
 // import DocumentEditor from "../views/DocumentEditor.vue";
 
 Vue.use(VueRouter);
@@ -15,6 +17,12 @@ const routes = [
     path: "/",
     name: "home",
     component: Home
+  },
+  {
+    path: "/document/:document_id",
+    name: "document",
+    component: Document,
+    props: true
   },
   {
     path: "/crop",

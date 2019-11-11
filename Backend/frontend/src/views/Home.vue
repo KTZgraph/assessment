@@ -6,21 +6,21 @@
         <p class="mb-0">Dodane przez:
           <span class="document-author">{{ doc.author }}</span>
         </p>
+        <span class="document-author">{{ doc.id }}</span>
       <!--  -->
       <!--  -->
         <h2>
           <router-link
-            :to="{ name: 'document', params: { slug: doc.slug }}"
+            :to="{ name: 'document', params: { document_id: doc.id }}"
             class="document-link"
           >
-          <a v-bind:href="doc.document_file">
             <b-img class="img-mini" v-bind:src="doc.document_file" fluid-grow alt="Fluid image"></b-img>
-          </a>
           </router-link>
         </h2>
          <a v-bind:href="doc.document_file"><p>Podgląd</p></a>
         <hr>
       </div>
+
       <!-- loading more data button section -->
       <div class="my-4">
         <p v-show="loadingDocuments">...loading...</p>
@@ -31,6 +31,8 @@
           >Load More
         </button>
       </div>
+      <!-- end loading more data button section -->
+
     </div>
   </div>
 </template>
