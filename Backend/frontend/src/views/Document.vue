@@ -55,8 +55,16 @@
                 <hr />
             </div>
         </div>
-        <!-- Odpowiedzi do dokumentu -->
+        <!-- Opcja dodawania odpowiedzi do dokumentu -->
+        <router-link
+            :to="{ name: 'answer-creator', params: { document_id: document.id }}"
+            class="document-link"
+          >Stwórz zadanie na podstawie pliku
+          </router-link>
         <hr>
+        <!--  Koniec dodawania odpowiedzi do dokumentu -->
+
+        <!-- Wyświetlanie odpowiedzi do dokumentu -->
         <div class="container">
             <AnswerComponent 
                 v-for="(answer, index) in answers"
@@ -90,8 +98,9 @@ export default {
             newDocumentBody: null,
             error: null,
             userHasAnswered: false,
-                showForm: false,
-                next: null,
+            showForm: false,
+            newAnswerBody: null,
+            next: null,
             loadingAnswers: false,
             requestUser: null,
         };
@@ -112,7 +121,7 @@ export default {
             this.requestUser = window.localStorage.getItem("username"); //data form loac storage
         },
 
-        getQuestionData() {
+        getDocumentData() {
             let endpoint = `/api/documents/${this.document_id}/`;
             axios.get(endpoint)
                 .then(response => {
@@ -126,7 +135,8 @@ export default {
             })
         },
         getDocumentsAnswers(){
-            let endpoint = `/api/documents/1/answers/`;
+            console.log("Document id: ", this.document_id);
+            let endpoint = `/api/documents/${this.document_id}/answers/`;
             console.log(endpoint)
             axios.get(endpoint)
                 .then(response => {
@@ -174,17 +184,21 @@ export default {
                 .catch(function (response) {
                     console.log(response);
                 });
+         },
+         onSubmitAnswer(){
 
          }
+        
     },
     created(){
-        this.getQuestionData();
+        this.getDocumentData();
         this.getDocumentsAnswers();
+        cosnole.log(" document.document_file: ",  document.document_file);
     }
 };
 </script>
 
-<style scoped>
+<style>
 .container{
     text-align:center;
 }
@@ -196,8 +210,13 @@ export default {
 .document-image{
     display: inline-block;
     vertical-align: middle;
-
 }
-
-
+.answer-added{
+    font-weight: bold;
+    color: green;
+}
+.error{
+    font-weight: bold;
+    color: red;
+}
 </style>

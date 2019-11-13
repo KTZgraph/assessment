@@ -3,10 +3,10 @@ import VueRouter from "vue-router";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-import Home from "../views/Home.vue";
+import Home from "@/views/Home.vue";
 import ImageCropper from "@/components/ImageCropper.vue";
-import Document from "../views/Document.vue";
-
+import Document from "@/views/Document.vue";
+import AnswerCreator from "@/views/AnswerCreator.vue"
 // import DocumentEditor from "../views/DocumentEditor.vue";
 
 Vue.use(VueRouter);
@@ -27,12 +27,19 @@ const routes = [
   {
     path: "/crop",
     name: "image-cropper",
-    component: ImageCropper
+    component: ImageCropper,
+    props: true
   },
   {
     path: "/document",
     name: "document-editor",
     component: ImageCropper
+  },
+  {
+    path: "/answer-creator/:document_id",
+    name: "answer-creator",
+    component: AnswerCreator,
+    props: true
   }
 ];
 

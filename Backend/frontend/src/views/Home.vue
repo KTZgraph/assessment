@@ -56,7 +56,7 @@ export default {
       console.log("eeeeeeeeeeeee");
     },
     getDocuments(){
-      let endpoint = "http://127.0.0.1:8000/api/documents/";
+      let endpoint = "api/documents/";
       if (this.next){
         endpoint = this.next;
       }

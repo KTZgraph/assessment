@@ -1,5 +1,5 @@
 <template>
-    <div class="answer-component">
+    <div class="single-answer">
         <h1>Odpowiedzi</h1>
         <p class="text-muted">
             <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
@@ -8,6 +8,12 @@
         <p>Przyznane punkty: {{ answer.score }}</p>
         <p>Nota: {{ answer.note }}</p>
         <p>Plik: {{ answer.answer_file }}</p>
+        <div class="img-answer">
+            <a v-bind:href="answer.answer_file">
+                    <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
+            </a>
+        </div>
+        <hr>
     </div>
 </template>
 
@@ -22,3 +28,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.img-answer{
+    max-width: 100px;
+    height: auto;
+}
+</style>
