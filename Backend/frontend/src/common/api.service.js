@@ -26,7 +26,7 @@ function apiService(endpoint, method, data) {
   };
   return fetch(endpoint, config)
            .then(handleResponse)
-          //  .catch(error => console.log(error))
+           .catch(error => console.log(error))
 }
 
 export { apiService }; //now can make request in any place in code

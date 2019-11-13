@@ -1,6 +1,13 @@
 <template>
     <div class="answer-creator">
-        <ImageCropper :imageSrc="src" />
+        <div v-if="imageSrc">
+            <ImageCropper 
+                :imageSrc="imageSrc" 
+            />
+        </div>
+        <div v-else>
+            <p> Nie można wczytać obraz</p>
+        </div>
     </div>
 </template>
 
@@ -14,12 +21,12 @@ export default {
     data(){
         return{
             document: null,
-            src: "http://127.0.0.1:8000/media/documents/kotek4_i8cc1o4.jpg"
+            imageSrc: null
         }
     },
     props: {
         document_id: {
-            type: Number,
+            type: String,
             required: true
         }
     },
@@ -35,7 +42,7 @@ export default {
                     if(response){
                         this.document = response.data;
                         console.log("this.document: ", this.document.document_file);
-                        this.src = this.document.document_file;
+                        this.imageSrc = this.document.document_file;
                         this.setPageTitle(response.data.slug);
                     }else{
                         this.document = null;

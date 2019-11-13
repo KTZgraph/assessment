@@ -83,7 +83,7 @@ export default {
     name: "Document",
     props: {
         document_id: {
-            type: Number,
+            type: String,
             required: true
         }
     },
@@ -135,9 +135,7 @@ export default {
             })
         },
         getDocumentsAnswers(){
-            console.log("Document id: ", this.document_id);
             let endpoint = `/api/documents/${this.document_id}/answers/`;
-            console.log(endpoint)
             axios.get(endpoint)
                 .then(response => {
                     if(response){
@@ -151,9 +149,7 @@ export default {
         },
         onSubmit(){
             let endpoint = `/api/documents/${this.document_id}/`;
-            console.log(this.newDocumentBody);
-            console.log(this.scores);
-
+            
             let bodyUpdateDocument = new FormData();
             // opis dokumentu
             if (this.newDocumentBody){
@@ -193,7 +189,6 @@ export default {
     created(){
         this.getDocumentData();
         this.getDocumentsAnswers();
-        cosnole.log(" document.document_file: ",  document.document_file);
     }
 };
 </script>
