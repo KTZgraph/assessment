@@ -53,7 +53,6 @@ export default {
   },
   methods:{
     onSubmit(){
-      console.log("eeeeeeeeeeeee");
     },
     getDocuments(){
       let endpoint = "api/documents/";

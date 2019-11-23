@@ -41,12 +41,23 @@
                 <!-- koniec formularz do zapisu danych  -->
 
                 <!-- tworzenie zadań -->
-                <div  @submit.prevent="onSubmit">
+                <!-- <div  @submit.prevent="onSubmit">
                     <div class="card-footer px-3">
                         <button type="submit" class="btn btn-sm btn-danger">Stwórz zadania z pliku</button>
                     </div>
+                </div> -->
+
+                <!-- Opcja dodawania odpowiedzi do dokumentu -->
+                <div class="card-footer px-3">
+                    <router-link
+                        :to="{ name: 'answer-creator', params: { document_id: document.id }}"
+                        class="document-link"
+                    >
+                    <button type="submit" class="btn btn-sm btn-danger">Stwórz zadania z pliku</button>
+                    </router-link>
                 </div>
             </div>
+
             <!-- image -->
             <div class="document-image">
                 <a v-bind:href="document.document_file">
@@ -55,12 +66,6 @@
                 <hr />
             </div>
         </div>
-        <!-- Opcja dodawania odpowiedzi do dokumentu -->
-        <router-link
-            :to="{ name: 'answer-creator', params: { document_id: document.id }}"
-            class="document-link"
-          >Stwórz zadanie na podstawie pliku
-          </router-link>
         <hr>
         <!--  Koniec dodawania odpowiedzi do dokumentu -->
 

@@ -36,12 +36,10 @@ export default {
     methods:{
         getDocumentData() {
             let endpoint = `/api/documents/${this.document_id}/`;
-            console.log("endpoint: ", endpoint);
             axios.get(endpoint)
                 .then(response => {
                     if(response){
                         this.document = response.data;
-                        console.log("this.document: ", this.document.document_file);
                         this.imageSrc = this.document.document_file;
                         this.setPageTitle(response.data.slug);
                     }else{

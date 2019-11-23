@@ -1,8 +1,13 @@
 from django.db import models
 from django.conf import settings
 
+
 def document_upload_to(instance, filename):
     return f'documents/{instance.document_code}/{filename}'
+
+def answer_upload_to(instance, filename):
+    return f'documents/{instance.document.document_code}/{filename}'
+
 
 class Document(models.Model):
     """
@@ -26,8 +31,21 @@ class Document(models.Model):
         return self.document_code # albo sćieżka do pliku self.document_file.url 
 
 
-def answer_upload_to(instance, filename):
-    return f'documents/{instance.document.document_code}/{filename}'
+class DocumentAssessment(models.Model):
+    """
+    Ocena CAŁEGO dokumentu przez użytkownika/pojedynczego nauczyciela
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    note =  models.TextField(blank=True)# uwagi/notatka
+    scores = models.PositiveSmallIntegerField(default=0) #czy zliczac sume uzyskanych punktow ktore przynzał za pojedyncze pytania
+    document = models.ForeignKey(Document,
+                                on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.author.username
 
 
 class Answer(models.Model):
@@ -35,14 +53,12 @@ class Answer(models.Model):
     Model zawierający fragmenty pliku będącego treścią zadania i rozwiązaniem 
     z pliku `class Document` z ocenami i uwagami nauczycieli 
     1 Dokument - N odpowiedzi
+    Twórca odpowiedzi musi uzupelnic maksymalna liczbe punktów
     """
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # fragment pliku po wybraniu tresci zadania
-    score =  models.PositiveSmallIntegerField(default=0) # liczba otrzymanych punktów
     max_score =  models.PositiveSmallIntegerField(default=0)# maksymalna ilośc punktów za zadanie
-    note =  models.TextField(blank=True)# uwagi/notatka
-    # autor dokumentu nie musi oceniać zadania
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
     document = models.ForeignKey(Document,
@@ -50,6 +66,22 @@ class Answer(models.Model):
                                     related_name="answers")
     answer_file = models.FileField(upload_to=answer_upload_to, blank=True)
 
+    def __str__(self):
+        return self.author.username
+
+
+class AnswerAssessment(models.Model):
+    """
+    Ocena POJEDYNCZEGO zadania - fragmentu wycinka dokumentu
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    note =  models.TextField(blank=True)# uwagi/notatka
+    scores = models.PositiveSmallIntegerField(default=0) #czy zliczac sume uzyskanych punktow ktore przynzał za pojedyncze pytania
+    answer = models.ForeignKey(Answer,
+                                on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE)
 
     def __str__(self):
         return self.author.username
