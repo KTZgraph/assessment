@@ -27,9 +27,43 @@ class DocumentViewSet(viewsets.ModelViewSet):
                 document_file=self.request.data.get('document_file'))
 
 
+############################ Ocenianie CAŁEGO PLIKU DOKUMENTU przez użytkownika ############################
+class DocumentAssessmentCreateAPIView(generics.CreateAPIView):
+    """
+    Umożliwia dodanie oceny do całego pliku
+    """
+    queryset = DocumentAssessment.objects.all()
+    serializer_class = DocumentAssessmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        request_user = self.request.user
+        kwarg_answer_id = self.kwargs.get("document_id")
+        related_document = get_object_or_404(Answer, id=int(kwarg_answer_id))
+
+        serializer.save(author=request_user, answer=related_document)
+
+class DocumentAssessmentListAPIView(generics.ListAPIView):
+    serializer_class = AnswerAssessmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        kwarg_document_id = self.kwargs.get("document_id")
+        return AnswerAssessment.objects.filter(document__id=kwarg_document_id).order_by("-created_at")
+
+class DocumentAssessmentRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD Retrieve Update Destroy
+    queryset = DocumentAssessment.objects.all()
+    serializer_class = DocumentAssessmentSerializer
+    permission_classes = [IsAuthenticated]
+
+
+#############################################################
+#############################################################
+
+
 class AnswerCreateAPIView(generics.CreateAPIView):
     """
-    Umożliwia dodanie 
+    Umożliwia dodanie pojedynczego wycinku zadania z Cropper.js
     """
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
@@ -38,8 +72,8 @@ class AnswerCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         # TODO: poprawić bledy z slug i id - nie mieszac ich
         request_user = self.request.user
-        kwarg_slug = self.kwargs.get("slug")
-        document = get_object_or_404(Document, id=int(kwarg_slug))
+        kwarg_document_id = self.kwargs.get("document_id")
+        document = get_object_or_404(Document, id=int(kwarg_document_id))
 
         serializer.save(author=request_user, document=document,
         answer_file=self.request.data.get('answer_file'))
@@ -49,8 +83,8 @@ class AnswerListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        kwarg_slug = self.kwargs.get("slug")
-        return Answer.objects.filter(document__slug=kwarg_slug).order_by("-created_at")
+        kwarg_document_id = self.kwargs.get("document_id")
+        return Answer.objects.filter(document__id=kwarg_document_id).order_by("-created_at")
 
 class AnswerRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD Retrieve Update Destroy
     queryset = Answer.objects.all()
@@ -69,7 +103,7 @@ class AnswerAssessmentCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         request_user = self.request.user
-        kwarg_answer_id = self.kwargs.get("answerId")
+        kwarg_answer_id = self.kwargs.get("answer_id")
         related_answer = get_object_or_404(Answer, id=int(kwarg_answer_id))
 
         serializer.save(author=request_user, answer=related_answer)
@@ -79,7 +113,7 @@ class AnswerAssessmentListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        kwarg_answer_id = self.kwargs.get("answerId")
+        kwarg_answer_id = self.kwargs.get("answer_id")
         return AnswerAssessment.objects.filter(answer__id=kwarg_answer_id).order_by("-created_at")
 
 class AnswerAssessmentRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD Retrieve Update Destroy

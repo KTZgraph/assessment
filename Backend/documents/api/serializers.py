@@ -4,7 +4,6 @@ from documents.models import Answer, AnswerAssessment, Document, DocumentAssessm
 class AnswerSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
-    max_score =  serializers.SerializerMethodField()# maksymalna ilośc punktów za zadanie
 
     class Meta:
         model = Answer
@@ -33,7 +32,6 @@ class AnswerSerializer(serializers.ModelSerializer):
 class AnswerAssessmentSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
-    scores =  serializers.SerializerMethodField() # liczba otrzymanych punktów
 
     class Meta:
         model = AnswerAssessment
@@ -49,6 +47,10 @@ class AnswerAssessmentSerializer(serializers.ModelSerializer):
     def get_note(self, instance):
         """Zwraca notatkę do zadania"""
         return instance.note
+    
+    def get_scores(self, instance):
+        """Zwraca maksymalna liczbę punktów za zadanie"""
+        return instance.scores
 
 
 class DocumentSerializer(serializers.ModelSerializer):
