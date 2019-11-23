@@ -37,6 +37,7 @@ class AnswerAssessmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnswerAssessment
+        exclude = ["answer", "updated_at"]
 
     def get_created_at(self, instance):
         return instance.created_at.strftime("%B %d, %Y") # month day year
@@ -79,6 +80,7 @@ class DocumentAssessmentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = DocumentAssessment
+        exclude = ["document", "updated_at"]
     
     def get_created_at(self, instance):
         return instance.created_at.strftime("%B %d, %Y") # month day year

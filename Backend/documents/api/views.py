@@ -6,8 +6,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated #widok tylko dla zalogowanych
 
 from documents.api.permissions import IsAuthorOrReadOnly
-from documents.api.serializers import AnswerSerializer, DocumentSerializer
-from documents.models import Answer, Document
+from documents.api.serializers import AnswerSerializer, AnswerAssessmentSerializer, DocumentSerializer, DocumentAssessmentSerializer
+from documents.models import Answer, AnswerAssessment, Document, DocumentAssessment
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
@@ -29,7 +29,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
 class AnswerCreateAPIView(generics.CreateAPIView):
     """
-    Umożliwia dodanie odpowiedzi do popjedynczego pliku po slug
+    Umożliwia dodanie 
     """
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
@@ -39,7 +39,6 @@ class AnswerCreateAPIView(generics.CreateAPIView):
         # TODO: poprawić bledy z slug i id - nie mieszac ich
         request_user = self.request.user
         kwarg_slug = self.kwargs.get("slug")
-        b = Document.objects.get(id=1)
         document = get_object_or_404(Document, id=int(kwarg_slug))
 
         serializer.save(author=request_user, document=document,
@@ -56,4 +55,34 @@ class AnswerListAPIView(generics.ListAPIView):
 class AnswerRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD Retrieve Update Destroy
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
+    permission_classes = [IsAuthenticated]
+
+
+############################ Ocenianie pojedynczego zadania przez użytkownika ############################
+class AnswerAssessmentCreateAPIView(generics.CreateAPIView):
+    """
+    Umożliwia dodanie oceny do pojedynczego zadania
+    """
+    queryset = AnswerAssessment.objects.all()
+    serializer_class = AnswerAssessmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        request_user = self.request.user
+        kwarg_answer_id = self.kwargs.get("answerId")
+        related_answer = get_object_or_404(Answer, id=int(kwarg_answer_id))
+
+        serializer.save(author=request_user, answer=related_answer)
+
+class AnswerAssessmentListAPIView(generics.ListAPIView):
+    serializer_class = AnswerAssessmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        kwarg_answer_id = self.kwargs.get("answerId")
+        return AnswerAssessment.objects.filter(answer__id=kwarg_answer_id).order_by("-created_at")
+
+class AnswerAssessmentRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD Retrieve Update Destroy
+    queryset = AnswerAssessment.objects.all()
+    serializer_class = AnswerAssessmentSerializer
     permission_classes = [IsAuthenticated]
