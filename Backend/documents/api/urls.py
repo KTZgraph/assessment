@@ -17,19 +17,27 @@ urlpatterns = [
         dv.AnswerCreateAPIView.as_view(),
         name="create-answer"),
     
+    path("documents/<int:document_id>/documentassessments/", 
+        dv.DocumentAssessmentCreateAPIView.as_view(),
+        name="documentassessment-list"),
+
+    path("documents/<int:document_id>/documentassessment/", 
+        dv.DocumentAssessmentCreateAPIView.as_view(),
+        name="create-documentassessment"),
+    
     path("answer/<int:answer_id>/answerassessments/", 
         dv.AnswerAssessmentListAPIView.as_view(),
-        name="answer-assessment"),
+        name="answer-answerassessment-list"),
 
     path("answer/<int:answer_id>/answerassessment/", 
         dv.AnswerAssessmentCreateAPIView.as_view(),
-        name="answer-assessment"),
+        name="answer-create-answerassessment"),
 
     path("documents/<int:document_id>/answer/<int:answer_id>/answerassessments/", 
         dv.AnswerAssessmentListAPIView.as_view(),
-        name="answer-assessment"),
+        name="answerassessment-list"),
 
     path("documents/<int:document_id>/answer/<int:answer_id>/answerassessment/", 
         dv.AnswerAssessmentCreateAPIView.as_view(),
-        name="answer-assessment"),
+        name="create-answerassessment"),
 ]

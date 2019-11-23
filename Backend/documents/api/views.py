@@ -38,18 +38,18 @@ class DocumentAssessmentCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         request_user = self.request.user
-        kwarg_answer_id = self.kwargs.get("document_id")
-        related_document = get_object_or_404(Answer, id=int(kwarg_answer_id))
+        kwarg_document_id = self.kwargs.get("document_id")
+        related_document = get_object_or_404(Document, id=int(kwarg_document_id))
 
-        serializer.save(author=request_user, answer=related_document)
+        serializer.save(author=request_user, document=related_document)
 
 class DocumentAssessmentListAPIView(generics.ListAPIView):
-    serializer_class = AnswerAssessmentSerializer
+    serializer_class = DocumentAssessmentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         kwarg_document_id = self.kwargs.get("document_id")
-        return AnswerAssessment.objects.filter(document__id=kwarg_document_id).order_by("-created_at")
+        return DocumentAssessment.objects.filter(document__id=kwarg_document_id).order_by("-created_at")
 
 class DocumentAssessmentRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD Retrieve Update Destroy
     queryset = DocumentAssessment.objects.all()

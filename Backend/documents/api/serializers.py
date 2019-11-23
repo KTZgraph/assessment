@@ -78,7 +78,6 @@ class DocumentSerializer(serializers.ModelSerializer):
 class DocumentAssessmentSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
-    document_code = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = DocumentAssessment
