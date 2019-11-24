@@ -1,3 +1,6 @@
+import io
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from django.db import IntegrityError
 from django.db import transaction
 from rest_framework import generics, viewsets
@@ -69,13 +72,17 @@ class AnswerCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        # TODO: poprawić bledy z slug i id - nie mieszac ich
         request_user = self.request.user
         kwarg_document_id = self.kwargs.get("document_id")
         document = get_object_or_404(Document, id=int(kwarg_document_id))
+        ############### BLOB ##################
+        blob_image = self.request.data.get('answer_file')
+        # wrapper = io.TextIOWrapper(blob_image)
 
         serializer.save(author=request_user, document=document,
-        answer_file=self.request.data.get('answer_file'))
+            answer_file=blob_image)
+            # answer_file=blob_image.file.getvalue())
+
 
 class AnswerListAPIView(generics.ListAPIView):
     serializer_class = AnswerSerializer

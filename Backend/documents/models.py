@@ -6,7 +6,10 @@ def document_upload_to(instance, filename):
     return f'documents/{instance.document_code}/{filename}'
 
 def answer_upload_to(instance, filename):
-    return f'documents/{instance.document.document_code}/{filename}'
+    """
+    Fragmenty plików zawsze .png
+    """
+    return f'documents/{instance.document.document_code}/{filename}.png'
 
 
 class Document(models.Model):
