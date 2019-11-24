@@ -5,8 +5,6 @@
             <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
         </p>
         <p>Maksymalna liczba punktów: {{ answer.max_score }}</p>
-        <p>Przyznane punkty: {{ answer.score }}</p>
-        <p>Nota: {{ answer.note }}</p>
         <p>Plik: {{ answer.answer_file }}</p>
         <div class="img-answer">
             <a v-bind:href="answer.answer_file">
@@ -25,6 +23,10 @@ export default {
             type: Object,
             required: true
         }
+    },
+    mounted(){
+        console.log(this.answer)
+        console.log("MOUNTED ANSWERCOMPONENT")
     }
 }
 </script>

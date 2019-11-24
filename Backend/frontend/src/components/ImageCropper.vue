@@ -1,16 +1,33 @@
 <template>
   <div>
-    <div class="img-container">
-      <img ref="image" :src="imageSrc">
-    </div>
-    <img :src="dataURI" class="img-preview">
+    <div v-if="!answerCreated" class="create-answer">
+      <div class="img-container">
+        <img ref="image" :src="imageSrc">
+      </div>
+      <img :src="dataURI" class="img-preview">
 
-    <!-- zapisywanie miniaturki obrazka -->
-        <button
-          @click="createNewAnswer"
-          class="btn btn-sm btn-outline-success"
-          >Utwórz zadanie
-        </button>
+      <!-- formularz do zapisu danych  -->
+      <form v-if="!answerCreated"   @submit.prevent="createNewAnswer">
+          <div>
+              <p>Maksymalna liczba punktów za zadanie<input v-model.number="max_scores" type="number"></p>
+          </div>
+          
+          <div class="card-footer px-3">
+              <button type="submit" class="btn btn-sm btn-success">Utwórz zadanie</button>
+          </div>
+      </form>
+      <!-- koniec formularz do zapisu danych  -->
+      <router-link :to="{ name: 'document', params: {document_id: document_id } }" class="btn btn-sm btn-danger">Wróć do dokumentu</router-link>
+    </div>
+
+        <!-- Wyświetlanie odpowiedzi do dokumentu -->
+        <div v-if="answerCreated" class="container">
+            <AnswerComponent 
+                :answer="answer"
+
+            />
+        </div>
+
   </div>
 </template>
 
@@ -32,11 +49,18 @@ export default {
           required: true
         }
       },
+  components: {
+    AnswerComponent
+  },
   data(){
     return {
+      max_scores: null,
       cropper: {},
       dataURI: {},
       image: {},
+      showPopup: false,
+      answerCreated: false,
+      answer: {}
     }
 
   },
@@ -72,11 +96,30 @@ export default {
           data: formDataNewAnswer
           })
           .then(function (response) {
-              console.log(response);
+              this.getAnswer(response.data.id);
           })
           .catch(function (response) {
-              console.log(response);
           });
+        
+      this.showPopup = true;
+      // this.showPopupMessage();
+      this.answerCreated = true;
+
+    },
+    getAnswer(answerId){
+      
+      let endpoint = `/api/documents/1/answer/39/`;
+            axios.get(endpoint)
+                .then(response => {
+                    if(response){
+                        this.answer = response.data;
+                        console.log(this.answer);
+                        console.log(typeof this.answer);
+                    }else{
+                        this.answer = null;
+                        // this.setPageTitle("404 - Page Not Found");
+                }
+            })
     }
   },
   mounted(){
