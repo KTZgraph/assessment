@@ -85,6 +85,7 @@ class AnswerListAPIView(generics.ListAPIView):
         return Answer.objects.filter(document__id=kwarg_document_id).order_by("-created_at")
 
 class AnswerRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD Retrieve Update Destroy
+    """AnswerRUDAPIView dla pojedynczego zadania """
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
     permission_classes = [IsAuthenticated]
