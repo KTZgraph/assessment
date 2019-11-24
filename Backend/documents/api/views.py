@@ -59,8 +59,6 @@ class DocumentAssessmentRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD
 
 #############################################################
 #############################################################
-
-
 class AnswerCreateAPIView(generics.CreateAPIView):
     """
     Umożliwia dodanie pojedynczego wycinku zadania z Cropper.js
