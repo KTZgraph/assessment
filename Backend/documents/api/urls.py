@@ -18,7 +18,7 @@ urlpatterns = [
         name="create-answer"),
     
     path("documents/<int:document_id>/documentassessments/", 
-        dv.DocumentAssessmentCreateAPIView.as_view(),
+        dv.DocumentAssessmentListAPIView.as_view(),
         name="documentassessment-list"),
 
     path("documents/<int:document_id>/documentassessment/", 
