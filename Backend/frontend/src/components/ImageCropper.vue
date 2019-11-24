@@ -18,8 +18,6 @@
 import Cropper from 'cropperjs';
 import axios from 'axios';
 import { base64StringToBlob } from 'blob-util'; //string base64 -> blob
-
-
 import { CSRF_TOKEN } from "@/common/csrf_token.js";
 import AnswerComponent from "@/components/Answer.vue";
 export default {
@@ -28,31 +26,29 @@ export default {
         imageSrc: {
           type: String,
           required: true
+        },
+        document_id: {
+          type: Number,
+          required: true
         }
       },
   data(){
     return {
-      document_id: 3,
       cropper: {},
       dataURI: {},
       image: {},
-
     }
 
   },
     methods:{
     createNewAnswer(){
-      console.log(this.dataURI);
-      console.log(typeof this.dataURI);
-
       // bardziej zoptymailozwana wersja 
       // http://eugeneware.com/software-development/converting-base64-datauri-strings-into-blobs-or-typed-array
       // convert to typed array
-      
-        var BASE64_MARKER = ';base64,';
-        var base64Index = this.dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
-        var base64 = this.dataURI.substring(base64Index);
-        var arr = Buffer.from(base64, 'base64');
+      var BASE64_MARKER = ';base64,';
+      var base64Index = this.dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+      var base64 = this.dataURI.substring(base64Index);
+      var arr = Buffer.from(base64, 'base64');
       
       // convert to blob and show as image
       let blob = new Blob([arr], { type: 'image/png' });
@@ -64,7 +60,6 @@ export default {
       formDataNewAnswer.append('answer_file', blob);/*, 'example.png' */
       formDataNewAnswer.append('max_score', 14);/*, 'example.png' */
 
-  
       axios.defaults.headers.common = {
           'X-Requested-With': 'XMLHttpRequest',
           'X-CSRFTOKEN': CSRF_TOKEN
@@ -82,7 +77,6 @@ export default {
           .catch(function (response) {
               console.log(response);
           });
-
     }
   },
   mounted(){

@@ -3,6 +3,7 @@
         <div v-if="imageSrc">
             <ImageCropper 
                 :imageSrc="imageSrc" 
+                :document_id="document_id"
             />
         </div>
         <div v-else>
