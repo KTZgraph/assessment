@@ -3,18 +3,22 @@
     <div class="img-container">
       <img ref="image" :src="imageSrc">
     </div>
-    <img :src="destination" class="img-preview">
+    <img :src="dataURI" class="img-preview">
 
     <!-- zapisywanie miniaturki obrazka -->
-    <button @>
-      Utwórz zadanie
-    </button>
+        <button
+          @click="createNewAnswer"
+          class="btn btn-sm btn-outline-success"
+          >Utwórz zadanie
+        </button>
   </div>
 </template>
 
 <script>
 import Cropper from 'cropperjs';
 import axios from 'axios';
+import { base64StringToBlob } from 'blob-util'; //string base64 -> blob
+
 
 import { CSRF_TOKEN } from "@/common/csrf_token.js";
 import AnswerComponent from "@/components/Answer.vue";
@@ -28,28 +32,49 @@ export default {
       },
   data(){
     return {
+      document_id: 3,
       cropper: {},
-      destination: {},
+      dataURI: {},
       image: {},
 
     }
 
   },
     methods:{
-    onSumbit(){
-      // Upload cropped image to server if the browser supports `HTMLCanvasElement.toBlob`.
-      // The default value for the second parameter of `toBlob` is 'image/png', change it if necessary.
-      cropper.getCroppedCanvas().toBlob((blob) => {
-        const formData = new FormData();
-        // Pass the image file name as the third parameter if necessary.
-        formData.append('croppedImage', blob);/*, 'example.png' */
-        formData.append('imageSrc', imageSrc); /*źródło główengo dokumentu */
-        let endpoint = `/api/documents/${this.document_id}/`;
-        axios({
-          method: 'put',
+    createNewAnswer(){
+      console.log(this.dataURI);
+      console.log(typeof this.dataURI);
+
+      // bardziej zoptymailozwana wersja 
+      // http://eugeneware.com/software-development/converting-base64-datauri-strings-into-blobs-or-typed-array
+      // convert to typed array
+      
+        var BASE64_MARKER = ';base64,';
+        var base64Index = this.dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+        var base64 = this.dataURI.substring(base64Index);
+        var arr = Buffer.from(base64, 'base64');
+      
+      // convert to blob and show as image
+      let blob = new Blob([arr], { type: 'image/png' });
+      // const blob = base64StringToBlob(this.dataURI) //, contentType);
+
+      let endpoint = `/api/documents/${this.document_id}/answer/`;
+      const formDataNewAnswer = new FormData();
+      // Pass the image file name as the third parameter if necessary.
+      formDataNewAnswer.append('answer_file', blob);/*, 'example.png' */
+      formDataNewAnswer.append('max_score', 14);/*, 'example.png' */
+
+  
+      axios.defaults.headers.common = {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFTOKEN': CSRF_TOKEN
+      };
+
+      axios({
+          method: 'post',
           url: endpoint,
           withCredentials: true,
-          data: bodyUpdateDocument
+          data: formDataNewAnswer
           })
           .then(function (response) {
               console.log(response);
@@ -57,7 +82,7 @@ export default {
           .catch(function (response) {
               console.log(response);
           });
-      })
+
     }
   },
   mounted(){
@@ -68,7 +93,7 @@ export default {
       // aspectRatio: 1, //idealny kwadrat
       crop:() => {
         const canvas = this.cropper.getCroppedCanvas();
-        this.destination = canvas.toDataURL("image/png"); //img.src = imgurl;
+        this.dataURI = canvas.toDataURL("image/png"); //img.src = imgurl;
       }
     })
   }
