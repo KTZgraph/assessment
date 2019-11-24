@@ -9,6 +9,7 @@ from documents.api.permissions import IsAuthorOrReadOnly
 from documents.api.serializers import AnswerSerializer, AnswerAssessmentSerializer, DocumentSerializer, DocumentAssessmentSerializer
 from documents.models import Answer, AnswerAssessment, Document, DocumentAssessment
 
+# TODO: po testowaniu dodac bledy, żeby użytkownik nie mógł dwa razy ocenić && dodac odpowiedzi &&  pliku && oceny zadania
 
 class DocumentViewSet(viewsets.ModelViewSet):
     """
