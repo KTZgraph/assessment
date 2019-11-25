@@ -3,6 +3,7 @@
     <h1>Tworzenie nowego dokumentu - drag and drop</h1>
     
     <form>
+        <!-- upload jednego pliku -->
         <div class="dropzone">
             <input 
                 type="file"
@@ -16,6 +17,16 @@
             <p v-if="uploading" class="progess-bar">
             </p>
         </div>
+
+        <!--  -->
+        <div class="content">
+        <ul>
+            <li v-for="file in uploadedFiles" :key="file.id" >
+                <a v-bind:href="file.document_file">{{file.document_file}}</a>
+            </li>
+        </ul>
+        </div>
+
     </form>
     
     </div>
@@ -33,6 +44,8 @@ export default {
             error: false,
             uploading: false,
             newDocumentId: null,
+            uploadedFiles: [],
+            progress: 0
         }
     },
     methods: {
@@ -51,16 +64,17 @@ export default {
             };
 
             let vm = this;
-            axios({
+            const rest = await axios({
                 method: 'post',
                 url: endpoint,
                 withCredentials: true,
                 data: formDataNewDocument
                 })
                 .then(function (response) {
-                    console.log(response.data.id)
+                    console.log(response)
+                    vm.uploadedFiles.push(response.data);
+                    console.log(vm.uploadedFiles)
                     vm.newDocumentId = response.data.id;
-                    console.log("Document id: ", vm.newDocumentId);
                 })
                 .catch(function (response) {
                     console.log("Error: ", response)
