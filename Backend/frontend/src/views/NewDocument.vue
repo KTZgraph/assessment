@@ -30,7 +30,7 @@
         <ul>
             <li v-for="file in uploadedFiles" :key="file.id" >
                 <a v-bind:href="file.document_file">{{file.document_file}}</a>
-                <button>Przejdź do edycji</button>
+                <router-link :to="{ name: 'document', params: {document_id: file.id } }" class="btn btn-sm btn-success">Przejdź do edycji</router-link>
             </li>
         </ul>
         </div>
