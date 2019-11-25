@@ -79,10 +79,11 @@
             v-show="nextDocumentAssessments"
             @click="getDocumentAssessments"
             class="btn btn-sm btn-outline-success"
-            >Load More
+            >Więcej ocen dokumentu
             </button>
         </div>
         <!-- end loading more data button section -->
+
         <!-- koniec opinii o dokumencie -->
 
         <!-- Wyświetlanie odpowiedzi do dokumentu -->
@@ -93,6 +94,19 @@
                 :v-key="index"
             />
         </div>
+
+        <!-- loading more data button section -->
+        <div class="my-4">
+            <p v-show="loadingAnswers">...loading...</p>
+            <button
+            v-show="nextAnswers"
+            @click="getDocumentAnswers"
+            class="btn btn-sm btn-outline-success"
+            >Więcej zadań
+            </button>
+        </div>
+        <!-- end loading more data button section -->
+
     </div>
 </template>
 
@@ -120,6 +134,8 @@ export default {
             nextDocumentAssessments: null,
             loadingDocumentAssessments: false,
             answers: [],
+            nextAnswers: null,
+            loadingAnswers: false,
             scores: 0,
             newDocumentDescriptionBody: null,
             error: null,
@@ -127,7 +143,6 @@ export default {
             showForm: false,
             newAnswerBody: null,
             next: null,
-            loadingAnswers: false,
             requestUser: null,
         };
     },
@@ -177,20 +192,27 @@ export default {
                         }else{ //if no addditional data exists
                             this.nextDocumentAssessments = null;
                         }
-                    }else{
-                }
+                    }
             })
         },
-        getDocumentsAnswers(){
+        getDocumentAnswers(){
             let endpoint = `/api/documents/${this.document_id}/answers/`;
+            if (this.nextAnswers){
+                endpoint = this.nextAnswers;
+            }
+            this.loadingAnswers = true;
+
             axios.get(endpoint)
                 .then(response => {
                     if(response){
                         this.answers.push(...response.data.results);
-                    }else{
-                        this.answers = null;
-                        this.setPageTitle("404 - Page Not Found");
-                }
+                        this.loadingAnswers = false;
+                        if (response.data.next) { //url from django REST for next data (pagination)
+                            this.nextAnswers = response.data.next;
+                        }else{ //if no addditional data exists
+                            this.nextAnswers = null;
+                        }
+                    }
             })
 
         },
@@ -231,7 +253,7 @@ export default {
     },
     created(){
         this.getDocumentData();
-        this.getDocumentsAnswers();
+        this.getDocumentAnswers();
         this.getDocumentAssessments();
     }
 };
