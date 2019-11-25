@@ -6,7 +6,7 @@
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <router-link :to="{ name: 'document-editor' }" class="btn btn-sm btn-success">Nowy plik</router-link>
+                <router-link :to="{ name: 'new-document' }" class="btn btn-sm btn-success">Utwórz dokument</router-link>
             </li>
         </ul>
     </div>

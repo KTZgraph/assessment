@@ -7,6 +7,8 @@ import Home from "@/views/Home.vue";
 import ImageCropper from "@/components/ImageCropper.vue";
 import Document from "@/views/Document.vue";
 import AnswerCreator from "@/views/AnswerCreator.vue"
+import NewDocument from "@/views/NewDocument.vue"
+
 // import DocumentEditor from "../views/DocumentEditor.vue";
 
 Vue.use(VueRouter);
@@ -23,6 +25,12 @@ const routes = [
     name: "document",
     component: Document,
     props: true
+  },
+  {
+    path: "/new-document",
+    name: "new-document",
+    component: NewDocument,
+    props: false
   },
   {
     path: "/crop",
