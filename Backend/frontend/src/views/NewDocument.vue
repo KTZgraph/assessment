@@ -15,6 +15,13 @@
                 Dodaj plik przez upuszczenie go tutaj
             </p>
             <p v-if="uploading" class="progess-bar">
+                <progress
+                    class="progress is-primary"
+                    :value="progress"
+                    max="100"
+                >
+                    {{progress}} %
+                </progress>
             </p>
         </div>
 
@@ -23,6 +30,7 @@
         <ul>
             <li v-for="file in uploadedFiles" :key="file.id" >
                 <a v-bind:href="file.document_file">{{file.document_file}}</a>
+                <button>Przejdź do edycji</button>
             </li>
         </ul>
         </div>
@@ -63,21 +71,25 @@ export default {
                 'X-CSRFTOKEN': CSRF_TOKEN
             };
 
+            this.uploading = true;
             let vm = this;
             const rest = await axios({
                 method: 'post',
                 url: endpoint,
                 withCredentials: true,
-                data: formDataNewDocument
+                data: formDataNewDocument,
+                onUploadProgress: e => vm.progress = Math.round(e.loaded * 100 / e.total)
                 })
                 .then(function (response) {
                     console.log(response)
                     vm.uploadedFiles.push(response.data);
                     console.log(vm.uploadedFiles)
                     vm.newDocumentId = response.data.id;
+                    vm.uploading = false;
                 })
                 .catch(function (response) {
                     console.log("Error: ", response)
+                    vm.uploading = false;
                 });
 
         }
@@ -117,4 +129,8 @@ export default {
     padding: 70px 0;
 }
 
+.dropzone .progess-bar{
+    text-align: center;
+    padding: 70px 10px;
+}
 </style>
