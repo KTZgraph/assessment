@@ -5,19 +5,13 @@
                 <!-- zamienic potem na document.document_code -->
                 <h1>{{ document.slug }}</h1>
                 <p class="mb-0">
-                    Dodane przez: <span class="author-name">{{ document.author }}</span>
-                </p>
-                <p class="mb-0">
-                    Kod: <span class="author-name">{{ document.document_code }}</span>
-                </p>
-                <p class="mb-0">
-                    Aktualna liczba punktów: <span class="author-name">{{ document.scores }}</span>
-                </p>
-                <p class="mb-0">
-                    Description: <span class="author-name">{{ document.description }}</span>
-                </p>
-                <p class="mb-0">
                     Utworzono: <span class="author-name">{{ document.created_at }}</span>
+                </p>
+                <p class="mb-0">
+                    Dokument dodany przez: <span class="author-name">{{ document.author }}</span>
+                </p>
+                <p class="mb-0">
+                    Kod dokumentu: <span class="author-name">{{ document.document_code }}</span>
                 </p>
                 <!-- formularz do zapisu danych  -->
                 <form  @submit.prevent="onSubmit">
@@ -26,7 +20,7 @@
                     </div>
                     <div class="card-block">
                         <textarea
-                        v-model="newDocumentBody"
+                        v-model="newDocumentDescriptionBody"
                         class="form-control"
                         placeholder="Opisz wybrany dokument"
                         rows="5"
@@ -50,7 +44,7 @@
                 <!-- Opcja dodawania odpowiedzi do dokumentu -->
                 <div class="card-footer px-3">
                     <router-link
-                        :to="{ name: 'answer-creator', params: { document_id: document.id }}"
+                        :to="{ name: 'answer-creator', params: { document_id: document_id}}"
                         class="document-link"
                     >
                     <button type="submit" class="btn btn-sm btn-danger">Stwórz zadania z pliku</button>
@@ -69,6 +63,28 @@
         <hr>
         <!--  Koniec dodawania odpowiedzi do dokumentu -->
 
+        <!-- wysiwetlanie dodanych opinii o doukemncie -->
+        <h1>Oceny całego dokumentu</h1>
+        <div class="container">
+            <DocumentAssessment 
+                v-for="(documentAssessment, index) in documentAssessments"
+                :documentAssessment="documentAssessment"
+                :v-key="index"
+            />
+        </div>
+        <!-- loading more data button section -->
+        <div class="my-4">
+            <p v-show="loadingDocumentAssessments">...loading...</p>
+            <button
+            v-show="nextDocumentAssessments"
+            @click="getDocumentAssessments"
+            class="btn btn-sm btn-outline-success"
+            >Load More
+            </button>
+        </div>
+        <!-- end loading more data button section -->
+        <!-- koniec opinii o dokumencie -->
+
         <!-- Wyświetlanie odpowiedzi do dokumentu -->
         <div class="container">
             <AnswerComponent 
@@ -84,6 +100,7 @@
 import axios from 'axios';
 import { CSRF_TOKEN } from "@/common/csrf_token.js";
 import AnswerComponent from "@/components/Answer.vue";
+import DocumentAssessment from "@/components/DocumentAssessment.vue";
 export default {
     name: "Document",
     props: {
@@ -93,14 +110,18 @@ export default {
         }
     },
     components: {
-        AnswerComponent
+        AnswerComponent,
+        DocumentAssessment,
     },
     data() {
         return {
             document: {},
+            documentAssessments: [],
+            nextDocumentAssessments: null,
+            loadingDocumentAssessments: false,
             answers: [],
             scores: 0,
-            newDocumentBody: null,
+            newDocumentDescriptionBody: null,
             error: null,
             userHasAnswered: false,
             showForm: false,
@@ -139,6 +160,27 @@ export default {
                 }
             })
         },
+        getDocumentAssessments() {
+            let endpoint = `/api/documents/${this.document_id}/documentassessments/`;
+            if (this.nextDocumentAssessments){
+                endpoint = this.nextDocumentAssessments;
+            }
+            this.loadingDocuments = true;
+            
+            axios.get(endpoint)
+                .then(response => {
+                    if(response){
+                        this.documentAssessments.push(...response.data.results);
+                        this.loadingDocumentAssessments = false;
+                        if (response.data.next) { //url from django REST for next data (pagination)
+                            this.nextDocumentAssessments = response.data.next;
+                        }else{ //if no addditional data exists
+                            this.nextDocumentAssessments = null;
+                        }
+                    }else{
+                }
+            })
+        },
         getDocumentsAnswers(){
             let endpoint = `/api/documents/${this.document_id}/answers/`;
             axios.get(endpoint)
@@ -153,13 +195,13 @@ export default {
 
         },
         onSubmit(){
-            let endpoint = `/api/documents/${this.document_id}/`;
+            //Dodawanie opisu dokumentu przez użytkownika
+            let endpoint = `/api/documents/${this.document_id}/documentassessment/`;
             
             let bodyUpdateDocument = new FormData();
             // opis dokumentu
-            if (this.newDocumentBody){
-                bodyUpdateDocument.set("description",this.newDocumentBody)
-
+            if (this.newDocumentDescriptionBody){
+                bodyUpdateDocument.set("description",this.newDocumentDescriptionBody)
             }
             //punkty
             if (this.scores){
@@ -174,7 +216,7 @@ export default {
             };
 
             axios({
-                method: 'put',
+                method: 'post',
                 url: endpoint,
                 withCredentials: true,
                 data: bodyUpdateDocument
@@ -185,15 +227,12 @@ export default {
                 .catch(function (response) {
                     console.log(response);
                 });
-         },
-         onSubmitAnswer(){
-
          }
-        
     },
     created(){
         this.getDocumentData();
         this.getDocumentsAnswers();
+        this.getDocumentAssessments();
     }
 };
 </script>

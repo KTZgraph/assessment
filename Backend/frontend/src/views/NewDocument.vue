@@ -63,8 +63,6 @@ export default {
             const file = this.$refs.file.files[0];
             const formDataNewDocument = new FormData();
             formDataNewDocument.append("document_file", file);
-            formDataNewDocument.append("description", "jakis opis z frontu");
-            formDataNewDocument.append("scores", 444);
 
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',

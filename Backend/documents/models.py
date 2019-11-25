@@ -27,8 +27,6 @@ class Document(models.Model):
      # file will be saved to MEDIA_ROOT/uploads/2015/01/30; albo zapisac pod document_code ?
     document_file = models.FileField(upload_to=document_upload_to, blank=True)
                                      #plik dokumentu zapisywany na dysku
-    description = models.TextField(blank=True)
-    scores = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.document_code # albo sćieżka do pliku self.document_file.url 

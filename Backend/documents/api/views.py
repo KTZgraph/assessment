@@ -19,7 +19,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     Widok do dodawania plików razem z metadanymi od użytkownika
     - pole document_code musi być unikalne i od razu podane [!]
     """
-    queryset = Document.objects.all()
+    queryset = Document.objects.all().order_by("-created_at")
     serializer_class = DocumentSerializer
 
     #tylko autor który dodał plik może go usunąć/ zroibć update
