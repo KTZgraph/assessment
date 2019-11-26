@@ -13,20 +13,21 @@
           </div>
           
           <div class="card-footer px-3">
-              <button type="submit" class="btn btn-sm btn-success">Utwórz zadanie</button>
+            <button type="submit" class="btn btn-sm btn-success">Utwórz zadanie</button>
           </div>
       </form>
       <!-- koniec formularz do zapisu danych  -->
+
       <router-link :to="{ name: 'document', params: {document_id: document_id } }" class="btn btn-sm btn-danger">Wróć do dokumentu</router-link>
     </div>
 
-        <!-- Wyświetlanie odpowiedzi do dokumentu -->
-        <div v-if="answerCreated" class="container">
-            <AnswerComponent 
-                :answer="answer"
-
-            />
-        </div>
+    <!-- Po dodaniu odpowiedzi przekirowuje do oceniania odpowiedzi -->
+    <div v-if="answerCreated" class="container">
+          <AnswerAssessment 
+              :answer_id="answer_id"
+              :document_id="document_id"
+          />
+    </div>
 
   </div>
 </template>
@@ -36,7 +37,7 @@ import Cropper from 'cropperjs';
 import axios from 'axios';
 import { base64StringToBlob } from 'blob-util'; //string base64 -> blob
 import { CSRF_TOKEN } from "@/common/csrf_token.js";
-import AnswerComponent from "@/components/Answer.vue";
+import AnswerAssessment from "@/views/AnswerAssessment.vue";
 export default {
   name: "ImageCropper",
   props:{
@@ -45,12 +46,12 @@ export default {
           required: true
         },
         document_id: {
-          type: Number,
+          type: String,
           required: true
         }
       },
   components: {
-    AnswerComponent
+    AnswerAssessment
   },
   data(){
     return {
@@ -60,12 +61,13 @@ export default {
       image: {},
       showPopup: false,
       answerCreated: false,
-      answer: {}
+      answer: {},
+      answer_id: null
     }
 
   },
     methods:{
-    createNewAnswer(){
+      createNewAnswer(){
       // bardziej zoptymailozwana wersja 
       // http://eugeneware.com/software-development/converting-base64-datauri-strings-into-blobs-or-typed-array
       // convert to typed array
@@ -89,6 +91,7 @@ export default {
           'X-CSRFTOKEN': CSRF_TOKEN
       };
 
+      let vm = this;
       axios({
           method: 'post',
           url: endpoint,
@@ -96,30 +99,11 @@ export default {
           data: formDataNewAnswer
           })
           .then(function (response) {
-              this.getAnswer(response.data.id);
+              vm.answer_id = response.data.id;
+              vm.answerCreated = true;
           })
           .catch(function (response) {
           });
-        
-      this.showPopup = true;
-      // this.showPopupMessage();
-      this.answerCreated = true;
-
-    },
-    getAnswer(answerId){
-      
-      let endpoint = `/api/documents/1/answer/39/`;
-            axios.get(endpoint)
-                .then(response => {
-                    if(response){
-                        this.answer = response.data;
-                        console.log(this.answer);
-                        console.log(typeof this.answer);
-                    }else{
-                        this.answer = null;
-                        // this.setPageTitle("404 - Page Not Found");
-                }
-            })
     }
   },
   mounted(){

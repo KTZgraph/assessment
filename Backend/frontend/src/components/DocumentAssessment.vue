@@ -19,7 +19,7 @@ export default {
     },
     mounted(){
         console.log("documentAssessment");
-        console.log(this.documentAssessment)
+        console.log(this.documentAssessment);
     }
 }
 </script>

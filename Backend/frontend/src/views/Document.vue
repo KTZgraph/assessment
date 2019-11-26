@@ -154,14 +154,12 @@ export default {
     },
     methods:{
         setPageTitle(title) {
-                document.title = title;
+            document.title = title;
         },
-
         setRequestUser(){
             // data for logged user
             this.requestUser = window.localStorage.getItem("username"); //data form loac storage
         },
-
         getDocumentData() {
             let endpoint = `/api/documents/${this.document_id}/`;
             axios.get(endpoint)
@@ -214,7 +212,6 @@ export default {
                         }
                     }
             })
-
         },
         onSubmit(){
             //Dodawanie opisu dokumentu przez użytkownika

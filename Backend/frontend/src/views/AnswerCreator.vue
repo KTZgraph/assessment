@@ -27,7 +27,7 @@ export default {
     },
     props: {
         document_id: {
-            type: Number,
+            type: String,
             required: true
         }
     },

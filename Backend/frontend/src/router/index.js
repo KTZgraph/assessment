@@ -8,6 +8,7 @@ import ImageCropper from "@/components/ImageCropper.vue";
 import Document from "@/views/Document.vue";
 import AnswerCreator from "@/views/AnswerCreator.vue"
 import NewDocument from "@/views/NewDocument.vue"
+import AnswerAssessment from "@/views/AnswerAssessment.vue"
 
 // import DocumentEditor from "../views/DocumentEditor.vue";
 
@@ -47,6 +48,12 @@ const routes = [
     path: "/answer-creator/:document_id",
     name: "answer-creator",
     component: AnswerCreator,
+    props: true
+  },
+  {
+    path: "/answer-assessment/:answer_id",
+    name: "answer-assessment",
+    component: AnswerAssessment,
     props: true
   }
 ];

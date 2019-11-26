@@ -8,7 +8,7 @@
         <p>Plik: {{ answer.answer_file }}</p>
         <div class="img-answer">
             <a v-bind:href="answer.answer_file">
-                    <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
+                <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
             </a>
         </div>
         <hr>
@@ -25,8 +25,7 @@ export default {
         }
     },
     mounted(){
-        console.log(this.answer)
-        console.log("MOUNTED ANSWERCOMPONENT")
+        console.log(this.answer);
     }
 }
 </script>
