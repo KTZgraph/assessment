@@ -14,7 +14,7 @@
                     Kod dokumentu: <span class="author-name">{{ document.document_code }}</span>
                 </p>
                 <!-- formularz do zapisu danych  -->
-                <form  @submit.prevent="onSubmit">
+                <form  @submit.prevent="addDocumentAssessment">
                     <div>
                         <p>Liczba punktów <input v-model.number="scores" type="number"></p>
                     </div>
@@ -35,7 +35,7 @@
                 <!-- koniec formularz do zapisu danych  -->
 
                 <!-- tworzenie zadań -->
-                <!-- <div  @submit.prevent="onSubmit">
+                <!-- <div  @submit.prevent="addDocumentAssessment">
                     <div class="card-footer px-3">
                         <button type="submit" class="btn btn-sm btn-danger">Stwórz zadania z pliku</button>
                     </div>
@@ -156,8 +156,7 @@ export default {
             document.title = title;
         },
         setRequestUser(){
-            // data for logged user
-            this.requestUser = window.localStorage.getItem("username"); //data form loac storage
+            this.requestUser = window.localStorage.getItem("username");
         },
         getDocumentData() {
             let endpoint = `/api/documents/${this.document_id}/`;
@@ -184,9 +183,9 @@ export default {
                     if(response){
                         this.documentAssessments.push(...response.data.results);
                         this.loadingDocumentAssessments = false;
-                        if (response.data.next) { //url from django REST for next data (pagination)
+                        if (response.data.next) {
                             this.nextDocumentAssessments = response.data.next;
-                        }else{ //if no addditional data exists
+                        }else{
                             this.nextDocumentAssessments = null;
                         }
                     }
@@ -204,35 +203,32 @@ export default {
                     if(response){
                         this.answers.push(...response.data.results);
                         this.loadingAnswers = false;
-                        if (response.data.next) { //url from django REST for next data (pagination)
+                        if (response.data.next) {
                             this.nextAnswers = response.data.next;
-                        }else{ //if no addditional data exists
+                        }else{ 
                             this.nextAnswers = null;
                         }
                     }
             })
         },
-        onSubmit(){
+        addDocumentAssessment(){
             //Dodawanie opisu dokumentu przez użytkownika
             let endpoint = `/api/documents/${this.document_id}/documentassessment/`;
             
             let bodyUpdateDocument = new FormData();
-            // opis dokumentu
             if (this.newDocumentDescriptionBody){
                 bodyUpdateDocument.set("description",this.newDocumentDescriptionBody)
             }
-            //punkty
             if (this.scores){
-                // czy można aktualizaowac punkty
                 bodyUpdateDocument.set("scores",this.scores)
             }
 
-            //brak aktualizacji obrazka - na jego podstawie są tworzone przeciez zadania
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRFTOKEN': CSRF_TOKEN
             };
 
+            let vm = this;
             axios({
                 method: 'post',
                 url: endpoint,
@@ -240,7 +236,8 @@ export default {
                 data: bodyUpdateDocument
                 })
                 .then(function (response) {
-                    console.log(response);
+                    vm.documentAssessments.unshift(response.data);
+
                 })
                 .catch(function (response) {
                     console.log(response);

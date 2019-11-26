@@ -79,9 +79,7 @@ export default {
                 onUploadProgress: e => vm.progress = Math.round(e.loaded * 100 / e.total)
                 })
                 .then(function (response) {
-                    console.log(response)
                     vm.uploadedFiles.push(response.data);
-                    console.log(vm.uploadedFiles)
                     vm.newDocumentId = response.data.id;
                     vm.uploading = false;
                 })

@@ -150,7 +150,7 @@ export default {
                 data: newAnswerAssessmentBody
                 })
                 .then(function (response) {
-                    vm.answerAssessments.unshift(response.data) //dodawanie obiektu na sam poczatek listy
+                    vm.answerAssessments.unshift(response.data); //dodawanie obiektu na sam poczatek listy
                 })
                 .catch(function (response) {
                     console.log(response);

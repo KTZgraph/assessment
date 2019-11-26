@@ -36,9 +36,6 @@ export default {
             type: Number,
             required: true
         }
-    },
-    mounted(){
-        console.log(this.answer);
     }
 }
 </script>

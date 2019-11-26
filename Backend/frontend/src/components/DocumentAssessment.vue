@@ -16,10 +16,6 @@ export default {
             type: Object,
             required: true
         }
-    },
-    mounted(){
-        console.log("documentAssessment");
-        console.log(this.documentAssessment);
     }
 }
 </script>
