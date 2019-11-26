@@ -15,7 +15,7 @@
 
         <div class="card-footer px-3">
             <router-link 
-                :to="{ name: 'answer-assessment', params: {answer_id: answer.id }}" 
+                :to="{ name: 'answer-assessment', params: {document_id: document_id, answer_id: answer.id }}" 
                 class="btn btn-sm btn-success"
                 >Oceń zadanie
             </router-link>
@@ -30,6 +30,10 @@ export default {
     props: {
         answer: {
             type: Object,
+            required: true
+        },
+        document_id: {
+            type: Number,
             required: true
         }
     },

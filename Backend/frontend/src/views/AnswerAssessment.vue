@@ -1,7 +1,6 @@
 <template>
     <div id="new-answer-assessment">
         <h1>ANSWER ASSESSMNET</h1>
-            {{answer}}    
         <div class="answer-data">
             <p class="text-muted">
                 <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
@@ -15,6 +14,27 @@
             </a>
         </div>
         
+        <!-- dodawanie oceny pojedynczego zadania -->
+        <div class="add-answer-assessment">
+                <form  @submit.prevent="addAnswerAssessment">
+                    <div>
+                        <p>Liczba punktów <input v-model.number="scores" type="number"></p>
+                    </div>
+                    <div class="card-block">
+                        <textarea
+                        v-model="newAnswerAssessmentBody"
+                        class="form-control"
+                        placeholder="Opisz wybrane zadanie"
+                        rows="5"
+                        ></textarea>
+                    </div>
+                    <br>
+                    <div class="card-footer px-3">
+                        <button type="submit" class="btn btn-sm btn-success">Dodaj ocenę zadania</button>
+                    </div>
+                </form>
+        </div>
+        
         <!-- Wyświetlanie ocen odpowiedzi -->
         <div class="container">
             <AnswerAssessmentComponent 
@@ -24,6 +44,18 @@
             />
         </div>
 
+        <!-- ładowanie kolejnych odpwoiedzi -->
+        <div class="my-4">
+            <p v-show="loadingAnswerAssessments">...loading...</p>
+            <button
+            v-show="nextAnswerAssessments"
+            @click="getAnswerAssessments"
+            class="btn btn-sm btn-outline-success"
+            >Więcej ocen zadania
+            </button>
+        </div>
+        <!-- end loading more data button section -->
+
     </div>
 </template>
 
@@ -31,12 +63,12 @@
 import axios from 'axios';
 
 import AnswerAssessmentComponent from '@/components/AnswerAssessmentComponent.vue'
-
+import { CSRF_TOKEN } from "@/common/csrf_token.js";
 export default {
     name: "AnswerAssessment",
     props: {
         answer_id: {
-            type: Number,
+            type: String,
             required: true
         },
         document_id: {
@@ -47,7 +79,11 @@ export default {
     data(){
         return{
             answer: {},
-            answerAssessments: []
+            answerAssessments: [],
+            scores: null, 
+            newAnswerAssessmentBody: null,
+            loadingAnswerAssessments: false,
+            nextAnswerAssessments: null
         }
     },
     components: {
@@ -60,8 +96,6 @@ export default {
                 .then(response => {
                     if(response){
                         this.answer = response.data;
-                        console.log(response);
-                        console.log(typeof this.answer);
                     }else{
                         this.answer = null;
                         // this.setPageTitle("404 - Page Not Found");
@@ -71,19 +105,60 @@ export default {
         
         getAnswerAssessments(){
             let endpoint = `/api/documents/${this.document_id}/answer/${this.answer_id}/answerassessments/`;
+            if (this.nextAnswerAssessments){
+                endpoint = this.nextAnswerAssessments;
+            }
+            this.loadingAnswerAssessments = true;
+
+            let vm = this;
             axios.get(endpoint)
                 .then(response => {
                     if(response){
-                        this.answerAssessments.push(...response.data);
-                        console.log(response);
-                    }else{
-                         this.answerAssessments = []
+                        this.answerAssessments.push(...response.data.results);
+                        this.loadingAnswerAssessments = false;
+                        if (response.data.next) { //url from django REST for next data (pagination)
+                            this.nextAnswerAssessments = response.data.next;
+                        }else{ //if no addditional data exists
+                            this.nextAnswerAssessments = null;
+                        }
                     }
             })
+        },
+
+        addAnswerAssessment(){
+            //dodawanie oceny pojedynczego zadania
+            let endpoint = `/api/documents/${this.document_id}/answer/${this.answer_id}/answerassessment/`;
+            
+            let newAnswerAssessmentBody = new FormData();
+            if (this.newAnswerAssessmentBody){
+                newAnswerAssessmentBody.set("description",this.newAnswerAssessmentBody)
+            }
+            if (this.scores){
+                newAnswerAssessmentBody.set("scores",this.scores)
+            }
+
+            axios.defaults.headers.common = {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFTOKEN': CSRF_TOKEN
+            };
+
+            let vm = this;
+            axios({
+                method: 'post',
+                url: endpoint,
+                withCredentials: true,
+                data: newAnswerAssessmentBody
+                })
+                .then(function (response) {
+                    vm.answerAssessments.unshift(response.data) //dodawanie obiektu na sam poczatek listy
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+         
         }
     },
     created(){
-        console.log("ANSWER ID : ", this.answer_id);
         this.getAnswer();
         this.getAnswerAssessments();
     }

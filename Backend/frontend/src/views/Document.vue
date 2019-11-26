@@ -89,6 +89,7 @@
             <AnswerComponent 
                 v-for="(answer, index) in answers"
                 :answer="answer"
+                :document_id="document_id"
                 :v-key="index"
             />
         </div>
