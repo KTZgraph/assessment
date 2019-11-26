@@ -68,11 +68,11 @@ export default {
     name: "AnswerAssessment",
     props: {
         answer_id: {
-            type: String,
+            type: String | Number,
             required: true
         },
         document_id: {
-          type: String,
+          type: String | Number,
           required: true
         }
     },
@@ -125,13 +125,13 @@ export default {
             })
         },
 
-        addAnswerAssessment(){
+        addAnswerAssessment(){ //TODO: jedna opinia na jednego użytkownika
             //dodawanie oceny pojedynczego zadania
             let endpoint = `/api/documents/${this.document_id}/answer/${this.answer_id}/answerassessment/`;
             
             let newAnswerAssessmentBody = new FormData();
             if (this.newAnswerAssessmentBody){
-                newAnswerAssessmentBody.set("description",this.newAnswerAssessmentBody)
+                newAnswerAssessmentBody.set("note",this.newAnswerAssessmentBody)
             }
             if (this.scores){
                 newAnswerAssessmentBody.set("scores",this.scores)
@@ -154,13 +154,18 @@ export default {
                 })
                 .catch(function (response) {
                     console.log(response);
-                });
-         
+                }); 
+        },
+        setRequestUser(){
+        // data for logged user
+        this.requestUser = window.localStorage.getItem("username"); //data form loac storage
         }
     },
     created(){
         this.getAnswer();
         this.getAnswerAssessments();
+        this.setRequestUser();
+        
     }
 }
 </script>

@@ -34,11 +34,11 @@ export default {
   name: "ImageCropper",
   props:{
         imageSrc: {
-          type: String,
+          type: String | Number,
           required: true
         },
         document_id: {
-          type: String,
+          type: String | Number,
           required: true
         }
       },
@@ -76,7 +76,7 @@ export default {
       const formDataNewAnswer = new FormData();
       // Pass the image file name as the third parameter if necessary.
       formDataNewAnswer.append('answer_file', blob);/*, 'example.png' */
-      formDataNewAnswer.append('max_score', 14);/*, 'example.png' */
+      formDataNewAnswer.append('max_score', this.max_scores);/*, 'example.png' */
 
       axios.defaults.headers.common = {
           'X-Requested-With': 'XMLHttpRequest',

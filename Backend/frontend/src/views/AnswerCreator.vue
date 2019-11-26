@@ -22,12 +22,13 @@ export default {
     data(){
         return{
             document: null,
-            imageSrc: null
+            imageSrc: null,
+            requestUser: null
         }
     },
     props: {
         document_id: {
-            type: String,
+            type: String | Number,
             required: true
         }
     },
@@ -51,10 +52,15 @@ export default {
         },
         setPageTitle(title){
             document.title = title;
+        },
+        setRequestUser(){
+        // data for logged user
+        this.requestUser = window.localStorage.getItem("username"); //data form loac storage
         }
     },
     created(){
         this.getDocumentData();
+        this.setRequestUser();
     }
 }
 </script>

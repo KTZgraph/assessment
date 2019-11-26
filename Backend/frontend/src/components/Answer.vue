@@ -3,7 +3,6 @@
         <h1>Pojedyncze zadanie</h1>
         <p class="text-muted">
             <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
-            <h1>{{ answer.id }} </h1>
         </p>
         <p>Maksymalna liczba punktów: {{ answer.max_score }}</p>
         <p>Plik: {{ answer.answer_file }}</p>

@@ -118,6 +118,10 @@ export default {
     name: "Document",
     props: {
         document_id: {
+            type: String | Number,
+            required: true
+        },
+        requestUser: { //parametr zalogowanego użytkownika z Home
             type: String,
             required: true
         }
@@ -211,7 +215,7 @@ export default {
                     }
             })
         },
-        addDocumentAssessment(){
+        addDocumentAssessment(){ //TODO: jedna opinia na jednego użytkownika
             //Dodawanie opisu dokumentu przez użytkownika
             let endpoint = `/api/documents/${this.document_id}/documentassessment/`;
             
@@ -242,12 +246,17 @@ export default {
                 .catch(function (response) {
                     console.log(response);
                 });
-         }
+         },
+        setRequestUser(){
+        // data for logged user
+        this.requestUser = window.localStorage.getItem("username"); //data form loac storage
+        }
     },
     created(){
         this.getDocumentData();
         this.getDocumentAnswers();
         this.getDocumentAssessments();
+        this.setRequestUser();
     }
 };
 </script>
