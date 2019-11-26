@@ -45,17 +45,18 @@ const routes = [
     component: ImageCropper
   },
   {
+    path: "/document/:document_id/answer-assessment/:answer_id",
+    name: "answer-assessment",
+    component: AnswerAssessment,
+    props: true
+  },
+  {
     path: "/answer-creator/:document_id",
     name: "answer-creator",
     component: AnswerCreator,
     props: true
-  },
-  {
-    path: "/answer-assessment/:answer_id",
-    name: "answer-assessment",
-    component: AnswerAssessment,
-    props: true
   }
+
 ];
 
 const router = new VueRouter({

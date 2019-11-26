@@ -28,7 +28,7 @@ export default {
     },
     methods:{
         getAnswer(){
-            let endpoint = `/api/documents/${this.document_id}/answer/${this.answer_id}/`; //TODO: poprawic url
+            let endpoint = `/api/documents/${this.document_id}/answer/${this.answer_id}/`;
             axios.get(endpoint)
                 .then(response => {
                     if(response){

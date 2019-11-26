@@ -17,16 +17,8 @@
           </div>
       </form>
       <!-- koniec formularz do zapisu danych  -->
-
+  
       <router-link :to="{ name: 'document', params: {document_id: document_id } }" class="btn btn-sm btn-danger">Wróć do dokumentu</router-link>
-    </div>
-
-    <!-- Po dodaniu odpowiedzi przekirowuje do oceniania odpowiedzi -->
-    <div v-if="answerCreated" class="container">
-          <AnswerAssessment 
-              :answer_id="answer_id"
-              :document_id="document_id"
-          />
     </div>
 
   </div>
@@ -99,7 +91,8 @@ export default {
           data: formDataNewAnswer
           })
           .then(function (response) {
-              vm.answer_id = response.data.id;
+            //przekierowywanie
+              vm.$router.push({name: 'answer-assessment', params: {answer_id: response.data.id}})
               vm.answerCreated = true;
           })
           .catch(function (response) {
