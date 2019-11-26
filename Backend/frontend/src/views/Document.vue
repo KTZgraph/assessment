@@ -57,10 +57,8 @@
                 <a v-bind:href="document.document_file">
                     <b-img class="img-full" v-bind:src="document.document_file" fluid-grow alt="Fluid image"></b-img>
                 </a>
-                <hr />
             </div>
         </div>
-        <hr>
         <!--  Koniec dodawania odpowiedzi do dokumentu -->
 
         <!-- wysiwetlanie dodanych opinii o doukemncie -->

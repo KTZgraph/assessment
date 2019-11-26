@@ -3,6 +3,7 @@
         <h1>Pojedyncze zadanie</h1>
         <p class="text-muted">
             <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
+            <h1>{{ answer.id }} </h1>
         </p>
         <p>Maksymalna liczba punktów: {{ answer.max_score }}</p>
         <p>Plik: {{ answer.answer_file }}</p>
@@ -11,7 +12,15 @@
                 <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
             </a>
         </div>
-        <hr>
+
+        <div class="card-footer px-3">
+            <router-link 
+                :to="{ name: 'answer-assessment', params: {answer_id: answer.id }}" 
+                class="btn btn-sm btn-success"
+                >Oceń zadanie
+            </router-link>
+        </div>
+
     </div>
 </template>
 
