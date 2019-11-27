@@ -6,9 +6,17 @@
         <p>Przynznana liczba punktów: {{ answerAssessment.scores }}</p>
         <p>Notatka: {{ answerAssessment.note }}</p>
 
-        <div v-if="isAnswerAuthor">
-            <button type="submit" class="btn btn-sm btn-danger">Usuń</button>
-            <button type="submit" class="btn btn-sm btn-warning">Edytuj</button>
+        <div v-if="isAnswerAuthor" >
+            <router-link 
+                :to="{ name: 'answer-assessment-editor', params: {answer_id:answer_id, answerAssessment_id: answerAssessment.id, document_id: document_id }}" 
+                class="btn btn-sm btn-warning"
+                >Edytuj
+            </router-link>
+            <router-link 
+                :to="{ name: 'answer-assessment-delete', params: {answer_id:answer_id, answerAssessment_id: answerAssessment.id, document_id: document_id }}" 
+                class="btn btn-sm btn-danger"
+                >Usuń
+            </router-link>
         </div>
 
     </div>
@@ -21,34 +29,23 @@ export default {
         answerAssessment: {
             type: Object,
             required: true
-        }
-    },
-    methods:{
-        deleteAnswerAssessment(){
-            let endpoint = `/api/documents/${this.document_id}/documentassessment/`;
-            axios.defaults.headers.common = {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFTOKEN': CSRF_TOKEN
-            };
-
-            let vm = this;
-            axios({
-                method: 'delete',
-                url: endpoint,
-                withCredentials: true,
-                })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (response) {
-                    console.log(response);
-                });
+        },
+        document_id: {
+            type: Number | String,
+            required: true
+        },
+        answer_id: {
+            type: Number | String,
+            required: true
         }
     },
     computed:{
         isAnswerAuthor(){
             return this.answerAssessment.author === window.localStorage.getItem("username");
         }
+    },
+    created(){
+        console.log("answerAssessment: ", this.answerAssessment)
     }
 }
 </script>

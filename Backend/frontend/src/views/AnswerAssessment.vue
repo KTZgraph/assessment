@@ -58,6 +58,8 @@
                         <AnswerAssessmentComponent 
                             v-for="(answerAssessment, index) in answerAssessments"
                             :answerAssessment="answerAssessment"
+                            :answer_id="answer_id"
+                            :document_id="document_id"
                             :v-key="index"
                         />
                     </div>

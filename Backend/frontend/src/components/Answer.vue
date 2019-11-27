@@ -1,5 +1,6 @@
 <template>
     <div class="single-answer">
+
         <p class="text-muted">
             <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
         </p>
@@ -10,10 +11,20 @@
                 <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
             </a>
         </div>
-        <div v-if="isAnswerAuthor">
-            <button type="submit" class="btn btn-sm btn-danger">Usuń</button>
-            <button type="submit" class="btn btn-sm btn-warning">Edytuj</button>
-        </div>
+
+        <!-- EDYCJA CAŁEGO ZADNAIA A NIE JEGO OPINII !!!!!!!!!!!!!  -->
+        <!-- <div v-if="isAnswerAuthor" >
+            <router-link 
+                :to="{ name: 'answer-assessment-editor', params: {answer_id:answer.id, answerAssessment_id: answerAssessment_id, document_id: document_id }}" 
+                class="btn btn-sm btn-warning"
+                >Edytuj
+            </router-link>
+            <router-link 
+                :to="{ name: 'answer-assessment-delete', params: {answer_id:answer.id, answerAssessment_id: answerAssessment_id, document_id: document_id }}" 
+                class="btn btn-sm btn-danger"
+                >Usuń
+            </router-link>
+        </div> -->
 
         <div class="card-footer px-3">
             <router-link 
