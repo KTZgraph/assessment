@@ -106,13 +106,18 @@ export default {
             nextAnswerAssessments: null,
             error: null,
             userHasAnswered: false,
-            showForm: false
+            showForm: false,
+            requestUser: null
         }
     },
     components: {
         AnswerAssessmentComponent
     },
     methods:{
+        setRequestUser(){
+            this.requestUser = window.localStorage.getItem("username");
+            console.log(this.requestUser);
+        },
         getAnswer(){
             let endpoint = `/api/documents/${this.document_id}/answer/${this.answer_id}/`;
             axios.get(endpoint)
@@ -187,7 +192,8 @@ export default {
     },
     created(){
         this.getAnswer();
-        this.getAnswerAssessments();        
+        this.getAnswerAssessments();
+        this.setRequestUser();    
     }
 }
 </script>

@@ -10,6 +10,10 @@
                 <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
             </a>
         </div>
+        <div v-if="isAnswerAuthor">
+            <button type="submit" class="btn btn-sm btn-danger">Usuń</button>
+            <button type="submit" class="btn btn-sm btn-warning">Edytuj</button>
+        </div>
 
         <div class="card-footer px-3">
             <router-link 
@@ -33,6 +37,11 @@ export default {
         document_id: {
             type: Number | String,
             required: true
+        }
+    },
+    computed:{
+        isAnswerAuthor(){
+            return this.answer.author === window.localStorage.getItem("username");
         }
     }
 }

@@ -17,13 +17,13 @@ export default {
   methods:{
     async setUserInfo(){
       let endpoint = `/api/user/`;
-            axios.get(endpoint)
-                .then(response => {
-                    if(response){
-                        const requestUser = response.data.username;
-                        window.localStorage.setItem("username", requestUser);
-                    }
-            })
+      axios.get(endpoint)
+          .then(response => {
+              if(response){
+                  const requestUser = response.data.username;
+                  window.localStorage.setItem("username", requestUser);
+              }
+      })
     }
   },
   created(){

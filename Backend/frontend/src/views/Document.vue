@@ -49,8 +49,7 @@
                                 <!-- koniec formularz do zapisu danych  -->
                             </div>
 
-
-                            <!-- Opcja dodawania odpowiedzi do dokumentu -->
+                            <!-- Przekierowanie do CroppJS -->
                             <div class="card-footer px-3">
                                 <router-link
                                     :to="{ name: 'answer-creator', params: { document_id: document_id}}"
@@ -153,7 +152,6 @@ export default {
             newDocumentDescriptionBody: null,
             newAnswerBody: null,
             next: null,
-            requestUser: null,
             error: null,
             userHasAnswered: false,
             showForm: false,
@@ -258,6 +256,7 @@ export default {
             this.userHasAnswered = true;
          }
     },
+
     created(){
         this.getDocumentData();
         this.getDocumentAnswers();
