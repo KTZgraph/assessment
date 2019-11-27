@@ -19,11 +19,17 @@
                     <div v-if="userHasAnswered">
                         <p class="documentAssessment-added"> Już dodałeś ocenę do tego zadania</p>
                     </div>
-                    <div v-else-if="showForm"></div>
+                    <div v-else-if="!showForm">
+                        <button
+                        class="btn tbn-sm btn-success"
+                        @click="showForm = true"
+                        >Oceń zadanie
+                        </button>
+                    </div>
                     <div v-else>
                         <!-- dodawanie oceny pojedynczego zadania -->
                         <div class="add-answer-assessment">
-                                <form  @submit.prevent="addAnswerAssessment">
+                                <form v-if="showForm" @submit.prevent="addAnswerAssessment">
                                     <div>
                                         <p>Liczba punktów <input v-model.number="scores" type="number"></p>
                                     </div>

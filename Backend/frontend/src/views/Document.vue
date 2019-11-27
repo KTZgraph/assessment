@@ -19,10 +19,16 @@
                             <div v-if="userHasAnswered">
                                 <p class="documentAssessment-added"> Już dodałeś ocenę do tego pliku </p>
                             </div>
-                            <div v-else-if="showForm"></div>
+                            <div v-else-if="!showForm">
+                                <button
+                                class="btn tbn-sm btn-success"
+                                @click="showForm = true"
+                                >Oceń dokument
+                                </button>
+                            </div>
                             <div v-else>
                                 <!-- formularz do zapisu danych  -->
-                                <form  @submit.prevent="addDocumentAssessment">
+                                <form v-if="showForm" @submit.prevent="addDocumentAssessment">
                                     <div>
                                         <p>Liczba punktów <input v-model.number="scores" type="number"></p>
                                     </div>

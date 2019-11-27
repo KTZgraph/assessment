@@ -31,7 +31,7 @@ export default {
             required: true
         },
         document_id: {
-            type: Number,
+            type: Number | String,
             required: true
         }
     }
