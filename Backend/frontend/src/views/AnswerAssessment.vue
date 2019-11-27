@@ -16,27 +16,32 @@
                             <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
                         </a>
                     </div>
-                    
-                    <!-- dodawanie oceny pojedynczego zadania -->
-                    <div class="add-answer-assessment">
-                            <form  @submit.prevent="addAnswerAssessment">
-                                <div>
-                                    <p>Liczba punktów <input v-model.number="scores" type="number"></p>
-                                </div>
-                                <div class="card-block">
-                                    <textarea
-                                    v-model="newAnswerAssessmentBody"
-                                    class="form-control"
-                                    placeholder="Opisz wybrane zadanie"
-                                    rows="5"
-                                    ></textarea>
-                                </div>
-                                <br>
-                                <div class="card-footer px-3">
-                                    <button type="submit" class="btn btn-sm btn-success">Oceń zadanie</button>
-                                </div>
-                                <router-link :to="{ name: 'document', params: {document_id: document_id } }" class="btn btn-sm btn-danger">Wróć do dokumentu</router-link>
-                            </form>
+                    <div v-if="userHasAnswered">
+                        <p class="documentAssessment-added"> Już dodałeś ocenę do tego zadania</p>
+                    </div>
+                    <div v-else-if="showForm"></div>
+                    <div v-else>
+                        <!-- dodawanie oceny pojedynczego zadania -->
+                        <div class="add-answer-assessment">
+                                <form  @submit.prevent="addAnswerAssessment">
+                                    <div>
+                                        <p>Liczba punktów <input v-model.number="scores" type="number"></p>
+                                    </div>
+                                    <div class="card-block">
+                                        <textarea
+                                        v-model="newAnswerAssessmentBody"
+                                        class="form-control"
+                                        placeholder="Opisz wybrane zadanie"
+                                        rows="5"
+                                        ></textarea>
+                                    </div>
+                                    <br>
+                                    <div class="card-footer px-3">
+                                        <button type="submit" class="btn btn-sm btn-success">Oceń zadanie</button>
+                                    </div>
+                                    <router-link :to="{ name: 'document', params: {document_id: document_id } }" class="btn btn-sm btn-danger">Wróć do dokumentu</router-link>
+                                </form>
+                        </div>
                     </div>
                 </b-col>
 
@@ -92,7 +97,10 @@ export default {
             scores: null, 
             newAnswerAssessmentBody: null,
             loadingAnswerAssessments: false,
-            nextAnswerAssessments: null
+            nextAnswerAssessments: null,
+            error: null,
+            userHasAnswered: false,
+            showForm: false
         }
     },
     components: {
@@ -105,6 +113,8 @@ export default {
                 .then(response => {
                     if(response){
                         this.answer = response.data;
+                        this.userHasAnswered = response.data.user_has_answered;
+                        console.log("this.userHasAnswered: ", this.userHasAnswered)
                     }else{
                         this.answer = null;
                         // this.setPageTitle("404 - Page Not Found");
@@ -161,10 +171,11 @@ export default {
                     })
                     .then(function (response) {
                         vm.answerAssessments.unshift(response.data); //dodawanie obiektu na sam poczatek listy
+                        vm.userHasAnswered = true;
                     })
                     .catch(function (response) {
                         console.log(response);
-                    }); 
+                    });
             }
         }
     },

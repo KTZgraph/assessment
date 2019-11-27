@@ -15,26 +15,33 @@
                             <p class="mb-0">
                                 Kod dokumentu: <span class="author-name">{{ document.document_code }}</span>
                             </p>
-                            <!-- formularz do zapisu danych  -->
-                            <form  @submit.prevent="addDocumentAssessment">
-                                <div>
-                                    <p>Liczba punktów <input v-model.number="scores" type="number"></p>
-                                </div>
-                                <div class="card-block">
-                                    <textarea
-                                    v-model="newDocumentDescriptionBody"
-                                    class="form-control"
-                                    placeholder="Opisz wybrany dokument"
-                                    rows="5"
-                                    ></textarea>
-                                </div>
-                                <br>
-                                <div class="card-footer px-3">
-                                    <button type="submit" class="btn btn-sm btn-success">Dodaj opis</button>
-                                </div>
-                            </form>
-                            <p v-if="error" class="error mt-2">{{ error }}</p>
-                            <!-- koniec formularz do zapisu danych  -->
+                            <!-- Opcje dodawania oceny - juz dodal ocene/ nie dodal/ chce zmodyfikowac -->
+                            <div v-if="userHasAnswered">
+                                <p class="documentAssessment-added"> Już dodałeś ocenę do tego pliku </p>
+                            </div>
+                            <div v-else-if="showForm"></div>
+                            <div v-else>
+                                <!-- formularz do zapisu danych  -->
+                                <form  @submit.prevent="addDocumentAssessment">
+                                    <div>
+                                        <p>Liczba punktów <input v-model.number="scores" type="number"></p>
+                                    </div>
+                                    <div class="card-block">
+                                        <textarea
+                                        v-model="newDocumentDescriptionBody"
+                                        class="form-control"
+                                        placeholder="Opisz wybrany dokument"
+                                        rows="5"
+                                        ></textarea>
+                                    </div>
+                                    <br>
+                                    <div class="card-footer px-3">
+                                        <button type="submit" class="btn btn-sm btn-success">Dodaj opis</button>
+                                    </div>
+                                </form>
+                                <p v-if="error" class="error mt-2">{{ error }}</p>
+                                <!-- koniec formularz do zapisu danych  -->
+                            </div>
 
 
                             <!-- Opcja dodawania odpowiedzi do dokumentu -->
@@ -162,6 +169,8 @@ export default {
                 .then(response => {
                     if(response){
                         this.document = response.data;
+                        this.userHasAnswered = response.data.user_has_answered;
+                        console.log("this.userHasAnswered: ", this.userHasAnswered)
                         this.setPageTitle(response.data.slug);
                     }else{
                         this.document = null;
@@ -240,6 +249,7 @@ export default {
                 .catch(function (response) {
                     console.log(response);
                 });
+            this.userHasAnswered = true;
          }
     },
     created(){
@@ -263,12 +273,12 @@ export default {
     display: inline-block;
     vertical-align: middle;
 }
-.answer-added{
-    font-weight: bold;
-    color: green;
-}
 .error{
     font-weight: bold;
     color: red;
+}
+.documentAssessment-added{
+    font-weight: bold;
+    color: green;
 }
 </style>
