@@ -41,7 +41,8 @@ class DocumentAssessment(models.Model):
     note =  models.TextField(blank=True)# uwagi/notatka
     scores = models.PositiveSmallIntegerField(default=0) #czy zliczac sume uzyskanych punktow ktore przynzał za pojedyncze pytania
     document = models.ForeignKey(Document,
-                                on_delete=models.CASCADE)
+                                on_delete=models.CASCADE,
+                                related_name="document_assessment")
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
     
@@ -80,7 +81,8 @@ class AnswerAssessment(models.Model):
     note =  models.TextField(blank=True)# uwagi/notatka
     scores = models.PositiveSmallIntegerField(default=0) #czy zliczac sume uzyskanych punktow ktore przynzał za pojedyncze pytania
     answer = models.ForeignKey(Answer,
-                                on_delete=models.CASCADE)
+                                on_delete=models.CASCADE,
+                                related_name="answer_assessments")
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
 

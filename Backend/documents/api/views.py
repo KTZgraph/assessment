@@ -39,7 +39,7 @@ class DocumentRUDAPIView(generics.RetrieveUpdateDestroyAPIView): # RUD Retrieve 
 ############################ Ocenianie CAŁEGO PLIKU DOKUMENTU przez użytkownika ############################
 class DocumentAssessmentCreateAPIView(generics.CreateAPIView):
     """
-    Umożliwia dodanie oceny do całego pliku
+    Umożliwia dodanie oceny do całego pliku, jeden plik może być oceniany raz przez tego samego użytkownika
     """
     queryset = DocumentAssessment.objects.all()
     serializer_class = DocumentAssessmentSerializer
@@ -49,6 +49,10 @@ class DocumentAssessmentCreateAPIView(generics.CreateAPIView):
         request_user = self.request.user
         kwarg_document_id = self.kwargs.get("document_id")
         related_document = get_object_or_404(Document, id=int(kwarg_document_id))
+
+        # ograniczenie użytkownika - tylko raz moze ocenić cały dokument
+        if related_document.document_assessment.filter(author=request_user).exists():
+            raise ValidationError("Dodałes już opis do tego dokumentu")
 
         serializer.save(author=request_user, document=related_document)
 
@@ -117,6 +121,10 @@ class AnswerAssessmentCreateAPIView(generics.CreateAPIView):
         request_user = self.request.user
         kwarg_answer_id = self.kwargs.get("answer_id")
         related_answer = get_object_or_404(Answer, id=int(kwarg_answer_id))
+
+        # ograniczenie użytkownika - tylko raz moze ocenić zadanie
+        if related_answer.answer_assessments.filter(author=request_user).exists(): #answer_assessments to nazwa relacji
+            raise ValidationError("Dodałes już opis do tego zadania")
 
         serializer.save(author=request_user, answer=related_answer)
 
