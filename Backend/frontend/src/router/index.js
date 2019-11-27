@@ -13,11 +13,9 @@ import DocumentAssessmentEditor from "@/views/DocumentAssessmentEditor.vue"
 import DocumentAssessmentDelete from "@/views/DocumentAssessmentDelete.vue"
 import AnswerAssessmentEditor from "@/views/AnswerAssessmentEditor.vue"
 import AnswerAssessmentDelete from "@/views/AnswerAssessmentDelete.vue"
-import AnswerEditor from "@/views/AnswerEditor.vue"
+import AnswerEditor from "@/views/AnswerEditor.vue" //aktualizuje TYLKO PUNKTy, nie obraz, bo bedzie syf w danych
 import AnswerDelete from "@/views/AnswerDelete.vue"
-
-// import DocumentEditor from "../views/DocumentEditor.vue";
-
+import DocumentDelete from "../views/DocumentDelete.vue"; // BEZ AKTUALIZACJI DOKUMENTU bo syf w danych
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 
@@ -31,6 +29,12 @@ const routes = [
     path: "/document/:document_id",
     name: "document",
     component: Document,
+    props: true
+  },
+  {
+    path: "/document/document-delete/:document_id",
+    name: "document-delete",
+    component: DocumentDelete,
     props: true
   },
   {

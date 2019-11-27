@@ -55,7 +55,7 @@
                                     :to="{ name: 'answer-creator', params: { document_id: document_id}}"
                                     class="document-link"
                                 >
-                                <button type="submit" class="btn btn-sm btn-danger">Stwórz zadania z pliku</button>
+                                <button type="submit" class="btn btn-sm btn-success">Stwórz zadania z pliku</button>
                                 </router-link>
                             </div>
                         </div>
@@ -65,6 +65,15 @@
                             <a v-bind:href="document.document_file">
                                 <b-img class="img-full" v-bind:src="document.document_file" fluid-grow alt="Fluid image"></b-img>
                             </a>
+                        </div>
+                        
+                        <!-- Tylko usuwanie całego dokumentu - nie mogę aktualizować podzadań etc. na podstawie nowego pliku i bedzie syf  -->
+                        <div v-if="isAnswerAuthor" >
+                            <router-link 
+                                :to="{ name: 'document-delete', params: {document_id: document_id }}" 
+                                class="btn btn-sm btn-danger"
+                                >Usuń dokument i wszystkie powiazane zdane
+                            </router-link>
                         </div>
                     </b-col>
                 </b-row>
@@ -162,6 +171,9 @@ export default {
         isDocumentAuthor(){
         // return true if the logged user is also the author of question instance
         return this.document.author === this.requestUser;
+        },
+        isAnswerAuthor(){
+            return this.document.author === window.localStorage.getItem("username");
         }
     },
     methods:{
