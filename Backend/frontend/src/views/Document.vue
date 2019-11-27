@@ -79,6 +79,7 @@
                     <DocumentAssessment 
                         v-for="(documentAssessment, index) in documentAssessments"
                         :documentAssessment="documentAssessment"
+                        :document_id="document_id"
                         :v-key="index"
                     />
                 </div>

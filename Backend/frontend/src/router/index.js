@@ -9,6 +9,7 @@ import Document from "@/views/Document.vue";
 import AnswerCreator from "@/views/AnswerCreator.vue"
 import NewDocument from "@/views/NewDocument.vue"
 import AnswerAssessment from "@/views/AnswerAssessment.vue"
+import DocumentAssessmentEditor from "@/views/DocumentAssessmentEditor.vue"
 
 // import DocumentEditor from "../views/DocumentEditor.vue";
 
@@ -25,6 +26,12 @@ const routes = [
     path: "/document/:document_id",
     name: "document",
     component: Document,
+    props: true
+  },
+  {
+    path: "/document/:document_id/document-assessment-editor/:documentAssessment_id",
+    name: "document-assessment-editor",
+    component: DocumentAssessmentEditor,
     props: true
   },
   {

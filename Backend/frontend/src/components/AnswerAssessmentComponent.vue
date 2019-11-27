@@ -23,6 +23,28 @@ export default {
             required: true
         }
     },
+    methods:{
+        deleteAnswerAssessment(){
+            let endpoint = `/api/documents/${this.document_id}/documentassessment/`;
+            axios.defaults.headers.common = {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFTOKEN': CSRF_TOKEN
+            };
+
+            let vm = this;
+            axios({
+                method: 'delete',
+                url: endpoint,
+                withCredentials: true,
+                })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (response) {
+                    console.log(response);
+                });
+        }
+    },
     computed:{
         isAnswerAuthor(){
             return this.answerAssessment.author === window.localStorage.getItem("username");
