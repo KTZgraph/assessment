@@ -1,110 +1,111 @@
 <template>
   <div class="document">
-        <div v-if="document" class="container">
-            <div class="document-data">
-                <!-- zamienic potem na document.document_code -->
-                <h1>{{ document.slug }}</h1>
-                <p class="mb-0">
-                    Utworzono: <span class="author-name">{{ document.created_at }}</span>
-                </p>
-                <p class="mb-0">
-                    Dokument dodany przez: <span class="author-name">{{ document.author }}</span>
-                </p>
-                <p class="mb-0">
-                    Kod dokumentu: <span class="author-name">{{ document.document_code }}</span>
-                </p>
-                <!-- formularz do zapisu danych  -->
-                <form  @submit.prevent="addDocumentAssessment">
-                    <div>
-                        <p>Liczba punktów <input v-model.number="scores" type="number"></p>
-                    </div>
-                    <div class="card-block">
-                        <textarea
-                        v-model="newDocumentDescriptionBody"
-                        class="form-control"
-                        placeholder="Opisz wybrany dokument"
-                        rows="5"
-                        ></textarea>
-                    </div>
-                    <br>
-                    <div class="card-footer px-3">
-                        <button type="submit" class="btn btn-sm btn-success">Dodaj opis</button>
-                    </div>
-                </form>
-                <p v-if="error" class="error mt-2">{{ error }}</p>
-                <!-- koniec formularz do zapisu danych  -->
+            <b-container v-if="document" class="container">
+                <!-- gorny wiersz -->
+                <b-row>
+                    <!-- lewa gorna kolumna -->
+                    <b-col>
+                        <div class="document-data">
+                            <p class="mb-0">
+                                Utworzono: <span class="author-name">{{ document.created_at }}</span>
+                            </p>
+                            <p class="mb-0">
+                                Dokument dodany przez: <span class="author-name">{{ document.author }}</span>
+                            </p>
+                            <p class="mb-0">
+                                Kod dokumentu: <span class="author-name">{{ document.document_code }}</span>
+                            </p>
+                            <!-- formularz do zapisu danych  -->
+                            <form  @submit.prevent="addDocumentAssessment">
+                                <div>
+                                    <p>Liczba punktów <input v-model.number="scores" type="number"></p>
+                                </div>
+                                <div class="card-block">
+                                    <textarea
+                                    v-model="newDocumentDescriptionBody"
+                                    class="form-control"
+                                    placeholder="Opisz wybrany dokument"
+                                    rows="5"
+                                    ></textarea>
+                                </div>
+                                <br>
+                                <div class="card-footer px-3">
+                                    <button type="submit" class="btn btn-sm btn-success">Dodaj opis</button>
+                                </div>
+                            </form>
+                            <p v-if="error" class="error mt-2">{{ error }}</p>
+                            <!-- koniec formularz do zapisu danych  -->
 
-                <!-- tworzenie zadań -->
-                <!-- <div  @submit.prevent="addDocumentAssessment">
-                    <div class="card-footer px-3">
-                        <button type="submit" class="btn btn-sm btn-danger">Stwórz zadania z pliku</button>
-                    </div>
-                </div> -->
 
-                <!-- Opcja dodawania odpowiedzi do dokumentu -->
-                <div class="card-footer px-3">
-                    <router-link
-                        :to="{ name: 'answer-creator', params: { document_id: document_id}}"
-                        class="document-link"
-                    >
-                    <button type="submit" class="btn btn-sm btn-danger">Stwórz zadania z pliku</button>
-                    </router-link>
+                            <!-- Opcja dodawania odpowiedzi do dokumentu -->
+                            <div class="card-footer px-3">
+                                <router-link
+                                    :to="{ name: 'answer-creator', params: { document_id: document_id}}"
+                                    class="document-link"
+                                >
+                                <button type="submit" class="btn btn-sm btn-danger">Stwórz zadania z pliku</button>
+                                </router-link>
+                            </div>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <div class="document-image">
+                            <a v-bind:href="document.document_file">
+                                <b-img class="img-full" v-bind:src="document.document_file" fluid-grow alt="Fluid image"></b-img>
+                            </a>
+                        </div>
+                    </b-col>
+                </b-row>
+
+
+        <!-- dolny wiersz -->
+        <b-row>
+            <!-- lewa dolna kolumna -->
+            <b-col>
+                <h1>Oceny całego dokumentu</h1>
+                <div class="container">
+                    <DocumentAssessment 
+                        v-for="(documentAssessment, index) in documentAssessments"
+                        :documentAssessment="documentAssessment"
+                        :v-key="index"
+                    />
                 </div>
-            </div>
+                <div class="my-4">
+                    <p v-show="loadingDocumentAssessments">...loading...</p>
+                    <button
+                    v-show="nextDocumentAssessments"
+                    @click="getDocumentAssessments"
+                    class="btn btn-sm btn-outline-info"
+                    >Więcej ocen dokumentu
+                    </button>
+                </div>
+            </b-col>
+            
+            <!-- prawa dolna kolumna -->
+            <b-col>
+                <h1>Pojedyncze zadania </h1>
+                <div class="container">
+                    <AnswerComponent 
+                        v-for="(answer, index) in answers"
+                        :answer="answer"
+                        :document_id="document_id"
+                        :v-key="index"
+                    />
+                </div>
 
-            <!-- image -->
-            <div class="document-image">
-                <a v-bind:href="document.document_file">
-                    <b-img class="img-full" v-bind:src="document.document_file" fluid-grow alt="Fluid image"></b-img>
-                </a>
-            </div>
-        </div>
-        <!--  Koniec dodawania odpowiedzi do dokumentu -->
+                <div class="my-4">
+                    <p v-show="loadingAnswers">...loading...</p>
+                    <button
+                    v-show="nextAnswers"
+                    @click="getDocumentAnswers"
+                    class="btn btn-sm btn-outline-info"
+                    >Więcej zadań
+                    </button>
+                </div>
 
-        <!-- wysiwetlanie dodanych opinii o doukemncie -->
-        <h1>Oceny całego dokumentu</h1>
-        <div class="container">
-            <DocumentAssessment 
-                v-for="(documentAssessment, index) in documentAssessments"
-                :documentAssessment="documentAssessment"
-                :v-key="index"
-            />
-        </div>
-        <!-- loading more data button section -->
-        <div class="my-4">
-            <p v-show="loadingDocumentAssessments">...loading...</p>
-            <button
-            v-show="nextDocumentAssessments"
-            @click="getDocumentAssessments"
-            class="btn btn-sm btn-outline-success"
-            >Więcej ocen dokumentu
-            </button>
-        </div>
-        <!-- end loading more data button section -->
-
-        <!-- koniec opinii o dokumencie -->
-
-        <!-- Wyświetlanie odpowiedzi do dokumentu -->
-        <div class="container">
-            <AnswerComponent 
-                v-for="(answer, index) in answers"
-                :answer="answer"
-                :document_id="document_id"
-                :v-key="index"
-            />
-        </div>
-
-        <!-- loading more data button section -->
-        <div class="my-4">
-            <p v-show="loadingAnswers">...loading...</p>
-            <button
-            v-show="nextAnswers"
-            @click="getDocumentAnswers"
-            class="btn btn-sm btn-outline-success"
-            >Więcej zadań
-            </button>
-        </div>
-        <!-- end loading more data button section -->
+            </b-col>
+        </b-row>
+    </b-container>
 
     </div>
 </template>

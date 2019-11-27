@@ -1,61 +1,70 @@
 <template>
     <div id="new-answer-assessment">
-        <h1>ANSWER ASSESSMNET</h1>
-        <div class="answer-data">
-            <p class="text-muted">
-                <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
-            </p>
-            <p>Maksymalna liczba punktów: {{ answer.max_score }}</p>
-        </div>
-        <p>Plik: {{ answer.answer_file }}</p>
-        <div class="img-answer">
-            <a v-bind:href="answer.answer_file">
-                <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
-            </a>
-        </div>
-        
-        <!-- dodawanie oceny pojedynczego zadania -->
-        <div class="add-answer-assessment">
-                <form  @submit.prevent="addAnswerAssessment">
-                    <div>
-                        <p>Liczba punktów <input v-model.number="scores" type="number"></p>
+        <b-container class="bv-example-row">
+            <b-row>
+                <!-- lewa kolumna -->
+                <b-col>
+                    <div class="answer-data">
+                        <p class="text-muted">
+                            <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
+                        </p>
+                        <p>Maksymalna liczba punktów: {{ answer.max_score }}</p>
                     </div>
-                    <div class="card-block">
-                        <textarea
-                        v-model="newAnswerAssessmentBody"
-                        class="form-control"
-                        placeholder="Opisz wybrane zadanie"
-                        rows="5"
-                        ></textarea>
+                    <p>Plik: {{ answer.answer_file }}</p>
+                    <div class="img-answer">
+                        <a v-bind:href="answer.answer_file">
+                            <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
+                        </a>
                     </div>
-                    <br>
-                    <div class="card-footer px-3">
-                        <button type="submit" class="btn btn-sm btn-success">Dodaj ocenę zadania</button>
+                    
+                    <!-- dodawanie oceny pojedynczego zadania -->
+                    <div class="add-answer-assessment">
+                            <form  @submit.prevent="addAnswerAssessment">
+                                <div>
+                                    <p>Liczba punktów <input v-model.number="scores" type="number"></p>
+                                </div>
+                                <div class="card-block">
+                                    <textarea
+                                    v-model="newAnswerAssessmentBody"
+                                    class="form-control"
+                                    placeholder="Opisz wybrane zadanie"
+                                    rows="5"
+                                    ></textarea>
+                                </div>
+                                <br>
+                                <div class="card-footer px-3">
+                                    <button type="submit" class="btn btn-sm btn-success">Oceń zadanie</button>
+                                </div>
+                                <router-link :to="{ name: 'document', params: {document_id: document_id } }" class="btn btn-sm btn-danger">Wróć do dokumentu</router-link>
+                            </form>
                     </div>
-                </form>
-        </div>
-        
-        <!-- Wyświetlanie ocen odpowiedzi -->
-        <div class="container">
-            <AnswerAssessmentComponent 
-                v-for="(answerAssessment, index) in answerAssessments"
-                :answerAssessment="answerAssessment"
-                :v-key="index"
-            />
-        </div>
+                </b-col>
 
-        <!-- ładowanie kolejnych odpwoiedzi -->
-        <div class="my-4">
-            <p v-show="loadingAnswerAssessments">...loading...</p>
-            <button
-            v-show="nextAnswerAssessments"
-            @click="getAnswerAssessments"
-            class="btn btn-sm btn-outline-success"
-            >Więcej ocen zadania
-            </button>
-        </div>
-        <!-- end loading more data button section -->
+                <!-- prawa kolumna -->
+                <b-col>        
+                    <!-- Wyświetlanie ocen odpowiedzi -->
+                    <div class="container">
+                        <AnswerAssessmentComponent 
+                            v-for="(answerAssessment, index) in answerAssessments"
+                            :answerAssessment="answerAssessment"
+                            :v-key="index"
+                        />
+                    </div>
 
+                    <!-- ładowanie kolejnych odpwoiedzi -->
+                    <div class="my-4">
+                        <p v-show="loadingAnswerAssessments">...loading...</p>
+                        <button
+                        v-show="nextAnswerAssessments"
+                        @click="getAnswerAssessments"
+                        class="btn btn-sm btn-outline-info"
+                        >Więcej ocen zadania
+                        </button>
+                    </div>
+                    <!-- end loading more data button section -->
+                </b-col>
+            </b-row>
+        </b-container>
     </div>
 </template>
 
@@ -131,30 +140,32 @@ export default {
             
             let newAnswerAssessmentBody = new FormData();
             if (this.newAnswerAssessmentBody){
+                //notatka może być pusta
                 newAnswerAssessmentBody.set("note",this.newAnswerAssessmentBody)
             }
             if (this.scores){
+                // punkty nie mogą być puste!
                 newAnswerAssessmentBody.set("scores",this.scores)
+
+                axios.defaults.headers.common = {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFTOKEN': CSRF_TOKEN
+                };
+
+                let vm = this;
+                axios({
+                    method: 'post',
+                    url: endpoint,
+                    withCredentials: true,
+                    data: newAnswerAssessmentBody
+                    })
+                    .then(function (response) {
+                        vm.answerAssessments.unshift(response.data); //dodawanie obiektu na sam poczatek listy
+                    })
+                    .catch(function (response) {
+                        console.log(response);
+                    }); 
             }
-
-            axios.defaults.headers.common = {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFTOKEN': CSRF_TOKEN
-            };
-
-            let vm = this;
-            axios({
-                method: 'post',
-                url: endpoint,
-                withCredentials: true,
-                data: newAnswerAssessmentBody
-                })
-                .then(function (response) {
-                    vm.answerAssessments.unshift(response.data); //dodawanie obiektu na sam poczatek listy
-                })
-                .catch(function (response) {
-                    console.log(response);
-                }); 
         },
         setRequestUser(){
         // data for logged user

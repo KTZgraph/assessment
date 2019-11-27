@@ -93,8 +93,8 @@ export default {
 
 <style scoped>
 .img-mini{
-    max-width:200px;
-    max-height:200px;
+    max-width:600px;
+    max-height:600px;
 }
 .document-author{
   font-weight: bold;
@@ -119,9 +119,11 @@ export default {
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
     grid-gap: 1rem;
     max-width: 80rem;
-    margin: 5rem auto;
+    margin-top: 5rem auto;
     padding: 0 5rem;
     text-align:center;
+    margin-right: auto;
+    margin-left: auto;
 }
 .gallery-panel img {
     width: 100%;

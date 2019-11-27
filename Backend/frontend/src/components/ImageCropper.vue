@@ -1,26 +1,35 @@
 <template>
   <div>
     <div v-if="!answerCreated" class="create-answer">
-      <div class="img-container">
-        <img ref="image" :src="imageSrc">
-      </div>
-      <img :src="dataURI" class="img-preview">
+      <b-container class="bv-example-row">
+        <!-- gorny wiersz -->
+        <b-row>
+          <!-- lewa gorna kolumna -->
+          <b-col>
+            <div class="img-container">
+              <img ref="image" :src="imageSrc">
+            </div>
+          </b-col>
+          <b-col>
+            <img :src="dataURI" class="img-preview">
 
-      <!-- formularz do zapisu danych  -->
-      <form v-if="!answerCreated"   @submit.prevent="createNewAnswer">
-          <div>
-              <p>Maksymalna liczba punktów za zadanie<input v-model.number="max_scores" type="number"></p>
-          </div>
-          
-          <div class="card-footer px-3">
-            <button type="submit" class="btn btn-sm btn-success">Utwórz zadanie</button>
-          </div>
-      </form>
-      <!-- koniec formularz do zapisu danych  -->
-  
-      <router-link :to="{ name: 'document', params: {document_id: document_id } }" class="btn btn-sm btn-danger">Wróć do dokumentu</router-link>
+            <!-- formularz do zapisu danych  -->
+            <form v-if="!answerCreated"   @submit.prevent="createNewAnswer">
+                <div>
+                    <p>Maksymalna liczba punktów za zadanie<input v-model.number="max_scores" type="number"></p>
+                </div>
+                
+                <div class="card-footer px-3">
+                  <button type="submit" class="btn btn-sm btn-success">Utwórz zadanie</button>
+                </div>
+                <router-link :to="{ name: 'document', params: {document_id: document_id } }" class="btn btn-sm btn-danger">Wróć do dokumentu</router-link>
+
+            </form>
+            <!-- koniec formularz do zapisu danych  -->
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
-
   </div>
 </template>
 
@@ -124,5 +133,9 @@ export default {
     height: 200px;
     float: left;
     margin-left: 10px;
+  }
+
+  .bv-example-row{
+    margin: 0 0 0 0;
   }
 </style>

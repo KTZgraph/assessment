@@ -1,6 +1,5 @@
 <template>
     <div class="single-answer">
-        <h1>Pojedyncze zadanie</h1>
         <p class="text-muted">
             <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
         </p>
