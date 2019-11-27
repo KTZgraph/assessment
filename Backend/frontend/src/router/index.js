@@ -13,7 +13,8 @@ import DocumentAssessmentEditor from "@/views/DocumentAssessmentEditor.vue"
 import DocumentAssessmentDelete from "@/views/DocumentAssessmentDelete.vue"
 import AnswerAssessmentEditor from "@/views/AnswerAssessmentEditor.vue"
 import AnswerAssessmentDelete from "@/views/AnswerAssessmentDelete.vue"
-
+import AnswerEditor from "@/views/AnswerEditor.vue"
+import AnswerDelete from "@/views/AnswerDelete.vue"
 
 // import DocumentEditor from "../views/DocumentEditor.vue";
 
@@ -32,6 +33,19 @@ const routes = [
     component: Document,
     props: true
   },
+  {
+    path: "/document/:document_id/answer-editor/:answer_id",
+    name: "answer-editor",
+    component: AnswerEditor,
+    props: true
+  },
+  {
+    path: "/document/:document_id/answer-delete/:answer_id",
+    name: "answer-delete",
+    component: AnswerDelete,
+    props: true
+  },
+
   {
     path: "/document/:document_id/document-assessment-editor/:documentAssessment_id",
     name: "document-assessment-editor",
