@@ -121,10 +121,6 @@ export default {
         document_id: {
             type: String | Number,
             required: true
-        },
-        requestUser: { //parametr zalogowanego użytkownika z Home
-            type: String,
-            required: true
         }
     },
     components: {
@@ -142,12 +138,12 @@ export default {
             loadingAnswers: false,
             scores: 0,
             newDocumentDescriptionBody: null,
-            error: null,
-            userHasAnswered: false,
-            showForm: false,
             newAnswerBody: null,
             next: null,
             requestUser: null,
+            error: null,
+            userHasAnswered: false,
+            showForm: false,
         };
     },
     computed: {
@@ -159,9 +155,6 @@ export default {
     methods:{
         setPageTitle(title) {
             document.title = title;
-        },
-        setRequestUser(){
-            this.requestUser = window.localStorage.getItem("username");
         },
         getDocumentData() {
             let endpoint = `/api/documents/${this.document_id}/`;
@@ -247,17 +240,12 @@ export default {
                 .catch(function (response) {
                     console.log(response);
                 });
-         },
-        setRequestUser(){
-        // data for logged user
-        this.requestUser = window.localStorage.getItem("username"); //data form loac storage
-        }
+         }
     },
     created(){
         this.getDocumentData();
         this.getDocumentAnswers();
         this.getDocumentAssessments();
-        this.setRequestUser();
     }
 };
 </script>

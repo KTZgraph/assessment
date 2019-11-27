@@ -56,7 +56,6 @@ export default {
       documents: [],
       next: null, //dla paginacji zdjeć
       loadingDocuments: false,
-      requestUser: null
     }
   },
   methods:{
@@ -78,16 +77,11 @@ export default {
             this.next = null;
           }
         })
-    },
-    setRequestUser(){
-      // data for logged user
-      this.requestUser = window.localStorage.getItem("username"); //data form loac storage
     }
   },
   created(){
     this.getDocuments();
-    this.setRequestUser();
-  }
+  },
 };
 </script>
 

@@ -4,6 +4,7 @@ from documents.models import Answer, AnswerAssessment, Document, DocumentAssessm
 class AnswerSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     created_at = serializers.SerializerMethodField(read_only=True)
+    user_has_answered = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Answer
@@ -27,6 +28,10 @@ class AnswerSerializer(serializers.ModelSerializer):
     def get_max_score(self, instance):
         """Zwraca maksymalna liczbę punktów za zadanie"""
         return instance.max_score
+    
+    def get_user_has_answered(self, instance):
+        request = self.context.get("request")
+        return instance.answer_assessments.filter(author=request.user).exists()
 
 
 class AnswerAssessmentSerializer(serializers.ModelSerializer):
@@ -58,6 +63,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField(read_only=True)
     document_code = serializers.SerializerMethodField(read_only=True)
     slug = serializers.SlugField(read_only=True)
+    user_has_answered = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Document
@@ -73,6 +79,10 @@ class DocumentSerializer(serializers.ModelSerializer):
     def get_document_code(self, instance):
         """Zwraca unikalny kod znajdujący się na górze dokumentu"""
         return instance.document_code
+
+    def get_user_has_answered(self, instance):
+        request = self.context.get("request")
+        return instance.document_assessment.filter(author=request.user).exists()
 
 
 class DocumentAssessmentSerializer(serializers.ModelSerializer):

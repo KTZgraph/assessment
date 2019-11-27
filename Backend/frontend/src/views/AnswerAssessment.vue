@@ -166,17 +166,11 @@ export default {
                         console.log(response);
                     }); 
             }
-        },
-        setRequestUser(){
-        // data for logged user
-        this.requestUser = window.localStorage.getItem("username"); //data form loac storage
         }
     },
     created(){
         this.getAnswer();
-        this.getAnswerAssessments();
-        this.setRequestUser();
-        
+        this.getAnswerAssessments();        
     }
 }
 </script>
