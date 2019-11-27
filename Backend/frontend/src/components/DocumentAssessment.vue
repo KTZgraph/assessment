@@ -12,7 +12,11 @@
                 class="btn btn-sm btn-warning"
                 >Edytuj
             </router-link>
-            <button  type="submit" class="btn btn-sm btn-danger">Usuń</button>
+            <router-link 
+                :to="{ name: 'document-assessment-delete', params: {documentAssessment_id: documentAssessment.id, document_id: document_id }}" 
+                class="btn btn-sm btn-danger"
+                >Usuń
+            </router-link>
         </div>
     </div>
 </template>

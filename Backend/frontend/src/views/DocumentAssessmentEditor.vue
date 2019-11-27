@@ -46,28 +46,7 @@ export default {
             newDocumentDescriptionBody: null
         }
     },
-    methods:{
-        deleteDocumentAssessment(){
-            //usuwanie opinie o calycm dokumencie
-            let endpoint = `/api/documents/${this.document_id}/documentassessment/${this.documentAssessment_id}/`;
-            axios.defaults.headers.common = {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFTOKEN': CSRF_TOKEN
-            };
-
-            axios({
-                method: 'delete',
-                url: endpoint,
-                withCredentials: true,
-                })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (response) {
-                    console.log(response);
-                });
-        },
-        
+    methods:{        
         updateDocumentAssessment(){
             //usuwanie opinie o calycm dokumencie
             let endpoint = `/api/documents/${this.document_id}/documentassessment/${this.documentAssessment_id}/`;
