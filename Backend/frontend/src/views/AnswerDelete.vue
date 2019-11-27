@@ -2,13 +2,16 @@
 <template>
     <div class="container mt-2">
         <h1 class="mb-3">Usuń permamentinie swoja ocenę dla dokumentu</h1>
-        
+        <p>Plik: {{ answer.answer_file }}</p>
+        <div class="img-answer">
+            <a v-bind:href="answer.answer_file">
+                <b-img class="img-full" v-bind:src="answer.answer_file" fluid-grow alt="Fluid image"></b-img>
+            </a>
+        </div>
         <p class="text-muted">
             <strong>{{ answer.author }} </strong> &#8901; {{ answer.created_at }}
         </p>
-        <p>Liczba punktów dla dokumentu: {{ answer.scores }}</p>
-        <p>Opis dokumentu: {{ answer.note }}</p>
-    
+        <p>MAksymalna punktów dla zadania: {{ answer.max_score }}</p>    
             <button
                 @click="deleteAnswer"
                 type="submit"
@@ -47,7 +50,7 @@ export default {
         deleteAnswer(){
             //usuwanie opinie o calycm dokumencie
             let endpoint = `/api/documents/${this.document_id}/answer/${this.answer_id}/`;
-            
+
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRFTOKEN': CSRF_TOKEN
@@ -70,7 +73,6 @@ export default {
         
         getAnswer(){
             let endpoint = `/api/documents/${this.document_id}/answer/${this.answer_id}/`;
-            //http://127.0.0.1:8000/api/documents/57/answer/139/
 
             let vm = this;
             axios({
@@ -78,6 +80,7 @@ export default {
                 url: endpoint,
                 })
                 .then(function (response) {
+                    console.log(response)
                     vm.answer= response.data;
                 })
                 .catch(function (response) {
@@ -85,7 +88,14 @@ export default {
         }
     },
     created(){
-        this.getDocumentAssessmnet();
+        this.getAnswer();
     }
 }
 </script>
+
+<style scoped>
+.img-answer{
+    max-width: 600px;
+    height: auto;
+}
+</style>
